@@ -10,6 +10,6 @@
 
         IJourneySteps Submit(string relation, object form);
 
-        Task<JourneyReport> RunAsync();
+        Task<JourneyReport> RunAsync(System.Threading.CancellationToken cancellationToken = default);
     }
 }

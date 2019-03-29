@@ -2,7 +2,7 @@
 
 namespace Evoq.Surfdude
 {
-    internal interface IStep
+    public interface IStep
     {
         Task RunAsync(IStep previous);
     }
