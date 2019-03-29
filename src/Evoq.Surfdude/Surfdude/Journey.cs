@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Threading.Tasks;
 
     public class Journey : IJourneyStart, IJourneySteps
@@ -34,7 +33,7 @@
 
         async Task<JourneyReport> IJourneySteps.RunAsync(System.Threading.CancellationToken cancellationToken)
         {
-            var finalStep = this.StepFactory.Get<FinalStep>(this.Context);
+            var finalStep = this.StepFactory.GetFinalStep(this.Context);
             this.steps.Add(finalStep);
             
             IStep previous = null;
@@ -75,7 +74,33 @@
 
         private IJourneySteps AppendStep<TStep>() where TStep : IStep
         {
-            var step = this.StepFactory.Get<TStep>(this.Context);
+            var stepType = typeof(TStep);
+            IStep step;
+
+            if (stepType == typeof(FromRootStep))
+            {
+                step = this.StepFactory.GetFromRootStep(this.Context);
+            }
+            else if (stepType == typeof(FollowLinkStep))
+            {
+                step = this.StepFactory.GetFollowLinkStep(this.Context);
+            }
+            else if (stepType == typeof(OpenItemStep))
+            {
+                step = this.StepFactory.GetOpenItemStep(this.Context);
+            }
+            else if (stepType == typeof(SubmitStep))
+            {
+                step = this.StepFactory.GetSubmitStep(this.Context);
+            }
+            else if (stepType == typeof(FinalStep))
+            {
+                step = this.StepFactory.GetFinalStep(this.Context);
+            }
+            else
+            {
+                throw new UnexpectedStepTypeException($"Unable to create step of type '{stepType}'.");
+            }
 
             this.steps.Add(step);
 
@@ -100,6 +125,17 @@
         IJourneySteps IJourneySteps.Submit(string relation, object form)
         {
             return AppendStep<SubmitStep>();
+        }
+
+        IJourneySteps IJourneySteps.Read<TModel>(out TModel model)
+        {
+            var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.Context);
+
+            this.steps.Add(step);
+
+            model = step.Model;
+
+            return this;
         }
     }
 }

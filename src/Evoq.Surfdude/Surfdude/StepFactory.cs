@@ -1,29 +1,45 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace Evoq.Surfdude
 {
     public class StepFactory
     {
-        internal TStep Get<TStep>(JourneyContext context) where TStep : IStep
+        private HttpClient GetHttpClient()
         {
-            return (TStep)this.Get(typeof(TStep), context);
+            return null;
         }
 
-        protected virtual IStep Get(Type stepType, JourneyContext context)
+        //
+
+        protected internal virtual IStep GetFromRootStep(JourneyContext context)
         {
-            // Potentially constrain Get<T> with new() and instantiate and setup and return.
+            return new FromRootStep(this.GetHttpClient(), context);
+        }
 
-            if (stepType == typeof(FromRootStep))
-            {
-                return new FromRootStep();
-            }
+        protected internal virtual IStep GetFollowLinkStep(JourneyContext context)
+        {
+            return new FollowLinkStep(this.GetHttpClient(), context);
+        }
 
-            if (stepType == typeof(FinalStep))
-            {
-                return new FinalStep();
-            }
+        protected internal virtual IStep GetOpenItemStep(JourneyContext context)
+        {
+            return new OpenItemStep(this.GetHttpClient(), context);
+        }
 
-            throw new UnexpectedStepTypeException($"Unable to create the step. A step of type '{stepType}' was unexpected.");
+        protected internal virtual IStep GetSubmitStep(JourneyContext context)
+        {
+            return new SubmitStep(this.GetHttpClient(), context);
+        }
+
+        protected internal virtual IStep GetFinalStep(JourneyContext context)
+        {
+            return new FinalStep(this.GetHttpClient(), context);
+        }
+
+        internal ReadIntoModelStep<TModel> GetReadIntoModelStep<TModel>(JourneyContext context) where TModel : class
+        {
+            return new ReadIntoModelStep<TModel>(this.GetHttpClient(), context);
         }
     }
 }

@@ -4,6 +4,8 @@ namespace Evoq.Surfdude
 {
     public interface IStep
     {
-        Task RunAsync(IStep previous);
+        object Result { get; }
+
+        Task<object> RunAsync(IStep previous);
     }
 }

@@ -14,7 +14,12 @@
                 .FollowLink("next")
                 .OpenItem(0)
                 .Submit("form", new { phrase = "beans" })
+                .Read<Model>(out Model model)
                 .RunAsync();
         }
+    }
+
+    internal class Model
+    {
     }
 }
