@@ -9,7 +9,7 @@ namespace Evoq.Surfdude
         {
         }
 
-        internal override Task<object> RunInternalAsync(IStep previous)
+        internal override Task<object> RunStepAsync(HttpRequestStep previous)
         {
             throw new System.NotImplementedException();
         }

@@ -18,9 +18,14 @@
 
         //
 
-        public static IJourneyStart Start(JourneyContext options)
+        public static IJourneyStart Start(string location)
         {
-            return new Journey(options);
+            return Start(new JourneyContext(location));
+        }
+
+        public static IJourneyStart Start(JourneyContext context)
+        {
+            return new Journey(context);
         }
 
         //

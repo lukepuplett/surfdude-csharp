@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Surfdude.Hypermedia.Controls\" />
-    <Folder Include="Surfdude.Hypermedia\" />
   </ItemGroup>
 
 </Project>

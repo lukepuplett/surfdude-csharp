@@ -15,19 +15,32 @@
 
         public object Result { get; private set; }
 
+        protected internal HttpResponseMessage Response => (HttpResponseMessage)this.Result;
+
         public HttpClient HttpClient { get; }
 
         public JourneyContext JourneyContext { get; }
+
+        public bool IgnoreBadResults => this.JourneyContext.IgnoreBadResults;
+
+        public byte[] ContentBytes { get; private set; }
 
         //
 
         public async Task<object> RunAsync(IStep previous)
         {
-            this.Result = await this.RunInternalAsync(previous);
+            this.Result = await this.RunStepAsync((HttpRequestStep)previous);
+
+            if (!this.IgnoreBadResults)
+            {
+                this.Response.EnsureSuccessStatusCode();
+            }
+
+            this.ContentBytes = await this.Response.Content.ReadAsByteArrayAsync();
 
             return Task.FromResult(this.Result);
         }
 
-        internal abstract Task<object> RunInternalAsync(IStep previous);
+        internal abstract Task<object> RunStepAsync(HttpRequestStep previous);
     }
 }

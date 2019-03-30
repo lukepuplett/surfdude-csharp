@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using Evoq.Surfdude.Hypermedia;
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Evoq.Surfdude
@@ -9,9 +11,11 @@ namespace Evoq.Surfdude
         {
         }
 
-        internal override Task<object> RunInternalAsync(IStep previous)
+        internal override Task<object> RunStepAsync(HttpRequestStep previous)
         {
-            throw new System.NotImplementedException();
+            var linkReader = new HyperlinkReader();
+
+            throw new NotImplementedException(nameof(FollowLinkStep));
         }
     }
 }

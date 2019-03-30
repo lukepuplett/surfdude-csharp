@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Evoq.Surfdude
@@ -9,9 +10,9 @@ namespace Evoq.Surfdude
         {
         }
 
-        internal override Task<object> RunInternalAsync(IStep previous)
+        internal async override Task<object> RunStepAsync(HttpRequestStep previous)
         {
-            throw new System.NotImplementedException();
+            return await this.HttpClient.GetAsync(this.JourneyContext.StartingLocation);
         }
     }
 }
