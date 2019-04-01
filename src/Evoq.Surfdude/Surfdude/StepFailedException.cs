@@ -2,7 +2,7 @@
 
 namespace Evoq.Surfdude
 {
-    internal class StepFailedException : Exception
+    public class StepFailedException : Exception
     {
         public StepFailedException()
         {

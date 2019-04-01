@@ -56,6 +56,8 @@
                     return report;
                 }
 
+                report.AppendStep(step.Name);
+
                 try
                 {
                     await step.RunAsync(previous);

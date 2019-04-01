@@ -1,5 +1,6 @@
 ﻿using Evoq.Surfdude.Hypermedia;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,9 +12,12 @@ namespace Evoq.Surfdude
         {
         }
 
-        internal override Task<object> RunStepAsync(HttpRequestStep previous)
+        internal async override Task<object> RunStepAsync(HttpRequestStep previous)
         {
-            var linkReader = new HyperlinkReader();
+            var reader = new HypermediaReader();
+            var responseMediaType = previous.Response.Content.Headers.ContentType?.MediaType;
+
+            var hyperlinks = await reader.ReadLinksAsync(new MemoryStream(previous.ContentBytes), responseMediaType);
 
             throw new NotImplementedException(nameof(FollowLinkStep));
         }

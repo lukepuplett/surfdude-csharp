@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude
 {
     using System;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@
     {
         static async Task Main(string[] args)
         {
-            var report = await Journey.Start("https://private-0dcfd-usermanagementbackend.apiary-mock.com")
+            var report = await Journey.Start(args[0] ?? "https://private-0dcfd-usermanagementbackend.apiary-mock.com")
                 .FromRoot()
                 .FollowLink("quotes")
                 .FollowLink("next")
@@ -16,6 +17,13 @@
                 .Submit("form", new { phrase = "beans" })
                 .Read<Model>(out Model model)
                 .RunAsync();
+
+            foreach(var line in report.Lines)
+            {
+                Console.WriteLine(line.Message);
+            }
+
+            report.EnsureSuccess();
         }
     }
 

@@ -7,7 +7,7 @@ namespace Evoq.Surfdude
     {
         private HttpClient GetHttpClient()
         {
-            return null;
+            return new HttpClient();
         }
 
         //

@@ -25,6 +25,8 @@
 
         public byte[] ContentBytes { get; private set; }
 
+        public string Name => this.GetType().Name;
+
         //
 
         public async Task<object> RunAsync(IStep previous)
@@ -33,7 +35,14 @@
 
             if (!this.IgnoreBadResults)
             {
-                this.Response.EnsureSuccessStatusCode();
+                try
+                {
+                    this.Response.EnsureSuccessStatusCode();
+                }
+                catch (HttpRequestException httpRequestException)
+                {
+                    throw new StepFailedException("The step failed. See inner exception.", httpRequestException);
+                }
             }
 
             this.ContentBytes = await this.Response.Content.ReadAsByteArrayAsync();

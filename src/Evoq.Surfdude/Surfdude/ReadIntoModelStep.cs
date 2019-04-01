@@ -5,8 +5,8 @@ namespace Evoq.Surfdude
 {
     public class ReadIntoModelStep<TModel> : IStep where TModel : class
     {
-        private HttpClient httpClient;
-        private JourneyContext context;
+        private readonly HttpClient httpClient;
+        private readonly JourneyContext context;
 
         public ReadIntoModelStep(HttpClient httpClient, JourneyContext context)
         {
@@ -17,6 +17,8 @@ namespace Evoq.Surfdude
         public TModel Model { get; internal set; }
 
         public object Result { get; private set; }
+
+        public string Name => "ReadModelIntoStep<TModel>";
 
         public Task<object> RunAsync(IStep previous)
         {
