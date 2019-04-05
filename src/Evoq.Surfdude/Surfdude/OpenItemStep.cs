@@ -18,7 +18,9 @@ namespace Evoq.Surfdude
 
         internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
         {
-            throw new System.NotImplementedException();
+            var item = previous.Resource.GetItemControls(this.Index).GetControl("item");
+
+            return this.HttpClient.GetAsync(item.HRef);
         }
     }
 }

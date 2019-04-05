@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Evoq.Surfdude.Hypertext
 {
-    public class HypertextResource
+    public class HypertextResource : IHypertextControls
     {
         public HypertextResource(ReadOnlyMemory<byte> resourceBytes, Encoding encoding)
         {
@@ -37,11 +37,15 @@ namespace Evoq.Surfdude.Hypertext
         public HypertextControl GetControl(string rel)
         {
             HypertextDocumentModel document = this.GetDocument();
-            HypertextControl control = document.Links.FirstOrDefault(c => rel.Equals(c.Rel, StringComparison.OrdinalIgnoreCase));
 
-            return control ??
-                throw new RelationNotFoundException(
-                    $"Could not find a hyperlink with relation '{rel}'. The available relations are '{String.Join(", ", document.Links.Select(l => l.Rel))}'");
+            return document.Links.GetControl(rel);
+        }
+
+        public IHypertextControls GetItemControls(int index)
+        {
+            var subDocuments = this.GetDocument().Items.ToArray();
+
+            return subDocuments[index].Links;
         }
     }
 }

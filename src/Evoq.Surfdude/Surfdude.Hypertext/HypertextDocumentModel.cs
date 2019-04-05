@@ -4,6 +4,8 @@ namespace Evoq.Surfdude.Hypertext
 {
     internal class HypertextDocumentModel
     {
-        public IEnumerable<Form> Links { get; set; } = new Form[] { };
+        public IEnumerable<HypertextDocumentModel> Items { get; set; } = new HypertextDocumentModel[] { };
+
+        public HypertextControls Links { get; set; } = new HypertextControls();
     }
 }
