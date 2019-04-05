@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Evoq.Surfdude.Hypertext;
 
 namespace Evoq.Surfdude
 {
@@ -16,14 +17,12 @@ namespace Evoq.Surfdude
 
         public TModel Model { get; internal set; }
 
-        public object Result { get; private set; }
-
         public string Name => "ReadModelIntoStep<TModel>";
 
-        public Task<object> RunAsync(IStep previous)
-        {
-            var response = (HttpResponseMessage)previous.Result;
+        public HypertextResource Resource => throw new System.NotImplementedException();
 
+        public Task<HypertextResource> RunAsync(IStep previous)
+        {
             throw new System.NotImplementedException();
 
             // Make HTTP request.

@@ -1,5 +1,7 @@
 ﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext;
+    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -13,9 +15,9 @@
 
         //
 
-        public object Result { get; private set; }
+        public HypertextResource Resource { get; private set; }
 
-        protected internal HttpResponseMessage Response => (HttpResponseMessage)this.Result;
+        protected HttpResponseMessage Response { get; set; }
 
         public HttpClient HttpClient { get; }
 
@@ -23,15 +25,13 @@
 
         public bool IgnoreBadResults => this.JourneyContext.IgnoreBadResults;
 
-        public byte[] ContentBytes { get; private set; }
-
         public string Name => this.GetType().Name;
 
         //
 
-        public async Task<object> RunAsync(IStep previous)
+        public async Task<HypertextResource> RunAsync(IStep previous)
         {
-            this.Result = await this.RunStepAsync((HttpRequestStep)previous);
+            this.Response = await this.InvokeRequestAsync((HttpRequestStep)previous);
 
             if (!this.IgnoreBadResults)
             {
@@ -45,11 +45,21 @@
                 }
             }
 
-            this.ContentBytes = await this.Response.Content.ReadAsByteArrayAsync();
+            var contentBytes = await this.Response.Content.ReadAsByteArrayAsync();
 
-            return Task.FromResult(this.Result);
+            var responseMediaType = this.Response.Content.Headers.ContentType?.MediaType ?? "application/json; charset=utf-8";
+            var memory = contentBytes.AsMemory();
+
+            var encodingResolver = new EncodingResolver();
+            var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.JourneyContext.DefaultEncoding);
+
+            this.Resource = new HypertextResource(memory, encoding);
+
+            return this.Resource;
         }
 
-        internal abstract Task<object> RunStepAsync(HttpRequestStep previous);
+
+
+        internal abstract Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous);
     }
 }

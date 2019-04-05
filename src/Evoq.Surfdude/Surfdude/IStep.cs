@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Evoq.Surfdude.Hypertext;
+using System.Threading.Tasks;
 
 namespace Evoq.Surfdude
 {
@@ -6,8 +7,8 @@ namespace Evoq.Surfdude
     {
         string Name { get; }
 
-        object Result { get; }
+        HypertextResource Resource { get; }
 
-        Task<object> RunAsync(IStep previous);
+        Task<HypertextResource> RunAsync(IStep previous);
     }
 }

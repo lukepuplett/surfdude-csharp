@@ -9,7 +9,7 @@
     {
         static async Task Main(string[] args)
         {
-            var report = await Journey.Start(args[0] ?? "https://private-0dcfd-usermanagementbackend.apiary-mock.com")
+            var report = await Journey.Start(args?.FirstOrDefault() ?? "https://private-0dcfd-usermanagementbackend.apiary-mock.com")
                 .FromRoot()
                 .FollowLink("quotes")
                 .FollowLink("next")

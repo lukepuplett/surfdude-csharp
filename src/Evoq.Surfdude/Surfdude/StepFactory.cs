@@ -17,19 +17,19 @@ namespace Evoq.Surfdude
             return new FromRootStep(this.GetHttpClient(), context);
         }
 
-        protected internal virtual IStep GetFollowLinkStep(JourneyContext context)
+        protected internal virtual IStep GetFollowLinkStep(string rel, JourneyContext context)
         {
-            return new FollowLinkStep(this.GetHttpClient(), context);
+            return new FollowLinkStep(rel, this.GetHttpClient(), context);
         }
 
-        protected internal virtual IStep GetOpenItemStep(JourneyContext context)
+        protected internal virtual IStep GetOpenItemStep(int index, JourneyContext context)
         {
-            return new OpenItemStep(this.GetHttpClient(), context);
+            return new OpenItemStep(index, this.GetHttpClient(), context);
         }
 
-        protected internal virtual IStep GetSubmitStep(JourneyContext context)
+        protected internal virtual IStep GetSubmitStep(string rel, JourneyContext context)
         {
-            return new SubmitStep(this.GetHttpClient(), context);
+            return new SubmitStep(rel, this.GetHttpClient(), context);
         }
 
         protected internal virtual IStep GetFinalStep(JourneyContext context)

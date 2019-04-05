@@ -1,4 +1,6 @@
-﻿namespace Evoq.Surfdude
+﻿using System.Text;
+
+namespace Evoq.Surfdude
 {
     public class JourneyContext
     {
@@ -13,6 +15,9 @@
         }
 
         public string StartingLocation { get; }
-        public bool IgnoreBadResults { get; internal set; }
+
+        public bool IgnoreBadResults { get; set; } = false;
+
+        public Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
     }
 }

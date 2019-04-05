@@ -5,11 +5,11 @@ namespace Evoq.Surfdude
 {
     public class SubmitStep : HttpRequestStep
     {
-        public SubmitStep(HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
+        public SubmitStep(string rel, HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
         {
         }
 
-        internal override Task<object> RunStepAsync(HttpRequestStep previous)
+        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
         {
             throw new System.NotImplementedException();
         }

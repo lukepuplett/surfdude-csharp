@@ -79,59 +79,32 @@
             return report;
         }
 
-        private IJourneySteps AppendStep<TStep>() where TStep : IStep
+        IJourneySteps IJourneyStart.FromRoot()
         {
-            var stepType = typeof(TStep);
-            IStep step;
-
-            if (stepType == typeof(FromRootStep))
-            {
-                step = this.StepFactory.GetFromRootStep(this.Context);
-            }
-            else if (stepType == typeof(FollowLinkStep))
-            {
-                step = this.StepFactory.GetFollowLinkStep(this.Context);
-            }
-            else if (stepType == typeof(OpenItemStep))
-            {
-                step = this.StepFactory.GetOpenItemStep(this.Context);
-            }
-            else if (stepType == typeof(SubmitStep))
-            {
-                step = this.StepFactory.GetSubmitStep(this.Context);
-            }
-            else if (stepType == typeof(FinalStep))
-            {
-                step = this.StepFactory.GetFinalStep(this.Context);
-            }
-            else
-            {
-                throw new UnexpectedStepTypeException($"Unable to create step of type '{stepType}'.");
-            }
-
-            this.steps.Add(step);
+            this.steps.Add(this.StepFactory.GetFromRootStep(this.Context));
 
             return this;
         }
 
-        IJourneySteps IJourneyStart.FromRoot()
+        IJourneySteps IJourneySteps.FollowLink(string rel)
         {
-            return AppendStep<FromRootStep>();
-        }
+            this.steps.Add(this.StepFactory.GetFollowLinkStep(rel, this.Context));
 
-        IJourneySteps IJourneySteps.FollowLink(string relation)
-        {
-            return AppendStep<FollowLinkStep>();
+            return this;
         }
 
         IJourneySteps IJourneySteps.OpenItem(int index)
         {
-            return AppendStep<OpenItemStep>();
+            this.steps.Add(this.StepFactory.GetOpenItemStep(index, this.Context));
+
+            return this;
         }
 
-        IJourneySteps IJourneySteps.Submit(string relation, object form)
+        IJourneySteps IJourneySteps.Submit(string rel, object form)
         {
-            return AppendStep<SubmitStep>();
+            this.steps.Add(this.StepFactory.GetSubmitStep(rel, this.Context));
+
+            return this;
         }
 
         IJourneySteps IJourneySteps.Read<TModel>(out TModel model)

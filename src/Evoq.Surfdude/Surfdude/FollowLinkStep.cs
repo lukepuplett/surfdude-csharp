@@ -1,6 +1,4 @@
-﻿using Evoq.Surfdude.Hypermedia;
-using System;
-using System.IO;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -8,18 +6,27 @@ namespace Evoq.Surfdude
 {
     internal class FollowLinkStep : HttpRequestStep
     {
-        public FollowLinkStep(HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
+        public FollowLinkStep(string rel, HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
         {
+            if (string.IsNullOrWhiteSpace(rel))
+            {
+                throw new ArgumentNullOrWhitespaceException(nameof(rel));
+            }
+
+            this.Rel = rel;
         }
 
-        internal async override Task<object> RunStepAsync(HttpRequestStep previous)
+        //
+
+        public string Rel { get; }
+
+        //
+
+        internal async override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
         {
-            var reader = new HypermediaReader();
-            var responseMediaType = previous.Response.Content.Headers.ContentType?.MediaType;
+            var control = previous.Resource.GetControl(this.Rel);
 
-            var hyperlinks = await reader.ReadLinksAsync(new MemoryStream(previous.ContentBytes), responseMediaType);
-
-            throw new NotImplementedException(nameof(FollowLinkStep));
+            return await this.HttpClient.GetAsync(control.HRef);
         }
     }
 }

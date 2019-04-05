@@ -5,11 +5,18 @@ namespace Evoq.Surfdude
 {
     internal class OpenItemStep : HttpRequestStep
     {
-        public OpenItemStep(HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
+        public OpenItemStep(int index, HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
         {
+            this.Index = index;
         }
 
-        internal override Task<object> RunStepAsync(HttpRequestStep previous)
+        //
+
+        public int Index { get; }
+
+        //
+
+        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
         {
             throw new System.NotImplementedException();
         }

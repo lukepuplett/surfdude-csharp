@@ -10,7 +10,7 @@ namespace Evoq.Surfdude
         {
         }
 
-        internal async override Task<object> RunStepAsync(HttpRequestStep previous)
+        internal async override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
         {
             return await this.HttpClient.GetAsync(this.JourneyContext.StartingLocation);
         }
