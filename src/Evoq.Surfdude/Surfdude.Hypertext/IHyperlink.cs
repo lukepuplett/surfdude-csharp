@@ -1,8 +1,9 @@
 ﻿namespace Evoq.Surfdude.Hypertext
 {
-    internal interface IHyperlink
+    public interface IHyperlink
     {
         string HRef { get; }
+
         string Rel { get; }
     }
 }

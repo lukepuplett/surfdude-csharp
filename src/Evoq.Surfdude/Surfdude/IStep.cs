@@ -1,14 +1,14 @@
-﻿using Evoq.Surfdude.Hypertext;
-using System.Threading.Tasks;
-
-namespace Evoq.Surfdude
+﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext;
+    using System.Threading.Tasks;
+
     public interface IStep // Factor into IStepAction and IStepResult
     {
         string Name { get; }
 
-        HypertextResource Resource { get; }
+        IHypertextResource Resource { get; }
 
-        Task<HypertextResource> RunAsync(IStep previous);
+        Task RunAsync(IStep previous);
     }
 }

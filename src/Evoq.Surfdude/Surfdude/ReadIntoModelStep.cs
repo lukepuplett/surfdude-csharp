@@ -19,9 +19,9 @@ namespace Evoq.Surfdude
 
         public string Name => "ReadModelIntoStep<TModel>";
 
-        public HypertextResource Resource => throw new System.NotImplementedException();
+        public IHypertextResource Resource => throw new System.NotImplementedException();
 
-        public Task<HypertextResource> RunAsync(IStep previous)
+        public Task RunAsync(IStep previous)
         {
             throw new System.NotImplementedException();
 

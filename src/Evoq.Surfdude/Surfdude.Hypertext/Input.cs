@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude.Hypertext
 {
-    internal class Input
+    public class Input
     {
+        public bool IsOptional { get; set; }
     }
 }

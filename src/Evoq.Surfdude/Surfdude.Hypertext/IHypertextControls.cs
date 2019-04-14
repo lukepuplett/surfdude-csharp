@@ -2,6 +2,6 @@
 {
     public interface IHypertextControls
     {
-        HypertextControl GetControl(string rel);
+        IHypertextControl GetControl(string rel);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Evoq.Surfdude.Hypertext
 {
-    public class ControlData
+    public class RequestData
     {
     }
 }

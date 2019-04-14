@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-namespace Evoq.Surfdude.Hypertext
+﻿namespace Evoq.Surfdude.Hypertext
 {
-    public class HypertextResource : IHypertextControls
+    using Evoq.Surfdude.Hypertext.SimpleJson;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+
+    public class HypertextResource : IHypertextResource
     {
         public HypertextResource(ReadOnlyMemory<byte> resourceBytes, Encoding encoding)
         {
@@ -16,13 +16,25 @@ namespace Evoq.Surfdude.Hypertext
 
         //
 
-        public ReadOnlyMemory<byte> ResourceBytes { get; }
+        internal ReadOnlyMemory<byte> ResourceBytes { get; }
 
-        public Encoding Encoding { get; }
+        internal Encoding Encoding { get; }
 
         //
 
-        private HypertextDocumentModel GetDocument()
+        public IHypertextControl GetControl(string rel)
+        {
+            return this.GetDocument().GetControl(rel);
+        }
+
+        public IHypertextControls GetItem(int index)
+        {
+            return this.GetDocument().GetItem(index);
+        }
+
+        //
+
+        private SimpleDocumentModel GetDocument()
         {
             // TODO / Negotiate deserializer.
 
@@ -31,21 +43,7 @@ namespace Evoq.Surfdude.Hypertext
             Newtonsoft.Json.JsonTextReader jsonTextReader = new Newtonsoft.Json.JsonTextReader(textReader);
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
 
-            return serializer.Deserialize<HypertextDocumentModel>(jsonTextReader);
-        }
-
-        public HypertextControl GetControl(string rel)
-        {
-            HypertextDocumentModel document = this.GetDocument();
-
-            return document.Links.GetControl(rel);
-        }
-
-        public IHypertextControls GetItemControls(int index)
-        {
-            var subDocuments = this.GetDocument().Items.ToArray();
-
-            return subDocuments[index].Links;
+            return serializer.Deserialize<SimpleDocumentModel>(jsonTextReader);
         }
     }
 }

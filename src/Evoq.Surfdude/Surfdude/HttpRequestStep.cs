@@ -7,33 +7,36 @@
 
     public abstract class HttpRequestStep : IStep
     {
-        public HttpRequestStep(HttpClient httpClient, JourneyContext journeyContext)
+        public HttpRequestStep(HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource = null)
         {
+            this.ReadResource = readResource ?? this.ReadResourceAsync;
             this.HttpClient = httpClient ?? throw new System.ArgumentNullException(nameof(httpClient));
             this.JourneyContext = journeyContext ?? throw new System.ArgumentNullException(nameof(journeyContext));
         }
 
         //
 
-        public HypertextResource Resource { get; private set; }
+        public IHypertextResource Resource { get; private set; }
+
+        public string Name => this.GetType().Name;
+        
+        //
 
         protected HttpResponseMessage Response { get; set; }
 
-        public HttpClient HttpClient { get; }
+        protected Func<HttpContent, Task<IHypertextResource>> ReadResource { get; }
 
-        public JourneyContext JourneyContext { get; }
+        protected HttpClient HttpClient { get; }
 
-        public bool IgnoreBadResults => this.JourneyContext.IgnoreBadResults;
-
-        public string Name => this.GetType().Name;
-
+        protected JourneyContext JourneyContext { get; }
+        
         //
 
-        public async Task<HypertextResource> RunAsync(IStep previous)
+        public async Task RunAsync(IStep previous)
         {
             this.Response = await this.InvokeRequestAsync((HttpRequestStep)previous);
 
-            if (!this.IgnoreBadResults)
+            if (!this.JourneyContext.IgnoreBadResults)
             {
                 try
                 {
@@ -45,20 +48,21 @@
                 }
             }
 
-            var contentBytes = await this.Response.Content.ReadAsByteArrayAsync();
+            this.Resource = await this.ReadResource(this.Response.Content);
+        }
 
-            var responseMediaType = this.Response.Content.Headers.ContentType?.MediaType ?? "application/json; charset=utf-8";
+        private async Task<IHypertextResource> ReadResourceAsync(HttpContent httpContent)
+        {
+            var contentBytes = await httpContent.ReadAsByteArrayAsync();
+
+            var responseMediaType = httpContent.Headers.ContentType?.MediaType ?? "application/json; charset=utf-8";
             var memory = contentBytes.AsMemory();
 
             var encodingResolver = new EncodingResolver();
             var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.JourneyContext.DefaultEncoding);
 
-            this.Resource = new HypertextResource(memory, encoding);
-
-            return this.Resource;
+            return new HypertextResource(memory, encoding);
         }
-
-
 
         internal abstract Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous);
     }
