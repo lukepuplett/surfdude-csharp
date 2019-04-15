@@ -1,12 +1,14 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-namespace Evoq.Surfdude
+﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext;
+    using System;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+
     internal class FollowLinkStep : HttpRequestStep
     {
-        public FollowLinkStep(string rel, HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
+        public FollowLinkStep(string rel, HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
+            : base(httpClient, journeyContext, readResource)
         {
             if (string.IsNullOrWhiteSpace(rel))
             {
@@ -22,9 +24,9 @@ namespace Evoq.Surfdude
 
         //
 
-        internal async override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
+        internal override async Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
         {
-            var control = previous.Resource.GetControl(this.Rel);
+            IHypertextControl control = previous.Resource.GetControl(this.Rel);
 
             return await this.HttpClient.GetAsync(control.HRef);
         }

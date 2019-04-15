@@ -12,8 +12,8 @@
 
         internal Journey(JourneyContext context, StepFactory stepFactory = null)
         {
-            this.Context = context ?? throw new ArgumentNullException(nameof(context));
-            this.StepFactory = stepFactory ?? new StepFactory();
+            this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
+            this.StepFactory = stepFactory ?? new StepFactory(context);
         }
 
         //
@@ -30,7 +30,7 @@
 
         //
 
-        public JourneyContext Context { get; }
+        public JourneyContext JourneyContext { get; }
 
         public StepFactory StepFactory { get; }
 
@@ -38,7 +38,7 @@
 
         async Task<JourneyReport> IJourneySteps.RunAsync(System.Threading.CancellationToken cancellationToken)
         {
-            var finalStep = this.StepFactory.GetFinalStep(this.Context);
+            var finalStep = this.StepFactory.GetFinalStep(this.JourneyContext);
             this.steps.Add(finalStep);
             
             IStep previous = null;
@@ -81,35 +81,35 @@
 
         IJourneySteps IJourneyStart.FromRoot()
         {
-            this.steps.Add(this.StepFactory.GetFromRootStep(this.Context));
+            this.steps.Add(this.StepFactory.GetFromRootStep(this.JourneyContext));
 
             return this;
         }
 
         IJourneySteps IJourneySteps.FollowLink(string rel)
         {
-            this.steps.Add(this.StepFactory.GetFollowLinkStep(rel, this.Context));
+            this.steps.Add(this.StepFactory.GetFollowLinkStep(rel, this.JourneyContext));
 
             return this;
         }
 
         IJourneySteps IJourneySteps.OpenItem(int index)
         {
-            this.steps.Add(this.StepFactory.GetOpenItemStep(index, this.Context));
+            this.steps.Add(this.StepFactory.GetOpenItemStep(index, this.JourneyContext));
 
             return this;
         }
 
         IJourneySteps IJourneySteps.Submit(string rel, object form)
         {
-            this.steps.Add(this.StepFactory.GetSubmitStep(rel, this.Context));
+            this.steps.Add(this.StepFactory.GetSubmitStep(rel, this.JourneyContext));
 
             return this;
         }
 
         IJourneySteps IJourneySteps.Read<TModel>(out TModel model)
         {
-            var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.Context);
+            var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.JourneyContext);
 
             this.steps.Add(step);
 

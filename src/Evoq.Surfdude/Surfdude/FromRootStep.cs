@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Evoq.Surfdude.Hypertext;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -6,7 +7,8 @@ namespace Evoq.Surfdude
 {
     internal class FromRootStep : HttpRequestStep
     {
-        public FromRootStep(HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
+        public FromRootStep(HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
+            : base(httpClient, journeyContext, readResource)
         {
         }
 

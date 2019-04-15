@@ -7,11 +7,11 @@
 
     public abstract class HttpRequestStep : IStep
     {
-        public HttpRequestStep(HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource = null)
+        public HttpRequestStep(HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
         {
-            this.ReadResource = readResource ?? this.ReadResourceAsync;
             this.HttpClient = httpClient ?? throw new System.ArgumentNullException(nameof(httpClient));
             this.JourneyContext = journeyContext ?? throw new System.ArgumentNullException(nameof(journeyContext));
+            this.ReadResource = readResource ?? throw new ArgumentNullException(nameof(readResource));
         }
 
         //
@@ -49,19 +49,6 @@
             }
 
             this.Resource = await this.ReadResource(this.Response.Content);
-        }
-
-        private async Task<IHypertextResource> ReadResourceAsync(HttpContent httpContent)
-        {
-            var contentBytes = await httpContent.ReadAsByteArrayAsync();
-
-            var responseMediaType = httpContent.Headers.ContentType?.MediaType ?? "application/json; charset=utf-8";
-            var memory = contentBytes.AsMemory();
-
-            var encodingResolver = new EncodingResolver();
-            var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.JourneyContext.DefaultEncoding);
-
-            return new HypertextResource(memory, encoding);
         }
 
         internal abstract Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous);

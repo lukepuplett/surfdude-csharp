@@ -1,11 +1,14 @@
-﻿using System.Net.Http;
+﻿using Evoq.Surfdude.Hypertext;
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Evoq.Surfdude
 {
     internal class OpenItemStep : HttpRequestStep
     {
-        public OpenItemStep(int index, HttpClient httpClient, JourneyContext journeyContext) : base(httpClient, journeyContext)
+        public OpenItemStep(int index, HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
+            : base(httpClient, journeyContext, readResource)
         {
             this.Index = index;
         }
