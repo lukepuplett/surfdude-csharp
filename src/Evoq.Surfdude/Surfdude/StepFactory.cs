@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude
 {
     using Evoq.Surfdude.Hypertext;
+    using Evoq.Surfdude.Hypertext.Http;
     using Evoq.Surfdude.Hypertext.SimpleJson;
     using System;
     using System.Net.Http;
@@ -36,14 +37,9 @@
             return new VisitItemStep(index, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetSendStep(string rel, object form, JourneyContext context)
+        protected internal virtual IStep GetSendStep(string rel, object transferObject, JourneyContext context)
         {
-            return new SendStep(rel, form, this.GetHttpClient(), context, this.ResourceFormatter);
-        }
-
-        protected internal virtual IStep GetFinalStep(JourneyContext context)
-        {
-            return new FinalStep(this.GetHttpClient(), context, this.ResourceFormatter);
+            return new SendStep(rel, transferObject, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
         internal ReadIntoModelStep<TModel> GetReadIntoModelStep<TModel>(JourneyContext context) where TModel : class

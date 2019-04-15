@@ -14,7 +14,7 @@
                 .Visit("registrations")                
                 .VisitItem(0)
                 .Send("update-contact-details", new { phrase = "beans" })
-                .CopyInto<Model>(out Model model)
+                .Receive(out ResourceModel model)
                 .RunAsync();
 
             foreach(var line in report.Lines)
@@ -26,7 +26,7 @@
         }
     }
 
-    internal class Model
+    internal class ResourceModel
     {
     }
 }

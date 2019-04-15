@@ -37,10 +37,7 @@
         //
 
         async Task<JourneyReport> IJourneySteps.RunAsync(System.Threading.CancellationToken cancellationToken)
-        {
-            var finalStep = this.StepFactory.GetFinalStep(this.JourneyContext);
-            this.steps.Add(finalStep);
-            
+        {            
             IStep previous = null;
             int stepCount = 1;
 
@@ -100,14 +97,14 @@
             return this;
         }
 
-        IJourneySteps IJourneySteps.Send(string rel, object form)
+        IJourneySteps IJourneySteps.Send(string rel, object transferObject)
         {
-            this.steps.Add(this.StepFactory.GetSendStep(rel, form, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetSendStep(rel, transferObject, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.CopyInto<TModel>(out TModel model)
+        IJourneySteps IJourneySteps.Receive<TModel>(out TModel model)
         {
             var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.JourneyContext);
 

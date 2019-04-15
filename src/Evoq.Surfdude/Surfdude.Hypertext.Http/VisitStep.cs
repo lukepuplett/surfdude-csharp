@@ -1,4 +1,4 @@
-﻿namespace Evoq.Surfdude
+﻿namespace Evoq.Surfdude.Hypertext.Http
 {
     using Evoq.Surfdude.Hypertext;
     using System;
@@ -24,7 +24,7 @@
 
         //
 
-        internal override async Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous)
+        internal override async Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
         {
             IHypertextControl control = previous.Resource.GetControl(this.Rel);
 

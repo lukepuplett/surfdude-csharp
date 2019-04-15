@@ -3,7 +3,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Evoq.Surfdude
+namespace Evoq.Surfdude.Hypertext.Http
 {
     internal class FromRootStep : HttpStep
     {
@@ -12,7 +12,7 @@ namespace Evoq.Surfdude
         {
         }
 
-        internal async override Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous)
+        internal async override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
         {
             return await this.HttpClient.GetAsync(this.JourneyContext.StartingLocation);
         }

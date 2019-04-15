@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Evoq.Surfdude.Hypertext
+namespace Evoq.Surfdude.Hypertext.SimpleJson
 {
-    public class EncodingResolver
+    internal class EncodingResolver
     {
-        public virtual Encoding ResolveEncoding(string responseMediaType, Encoding defaultEncoding = null)
+        public Encoding ResolveEncoding(string responseMediaType, Encoding defaultEncoding = null)
         {
             if (string.IsNullOrWhiteSpace(responseMediaType))
             {

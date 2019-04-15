@@ -21,11 +21,10 @@
         public async Task<IHypertextResource> ReadResourceAsync(HttpContent httpContent)
         {
             var contentBytes = await httpContent.ReadAsByteArrayAsync();
-
-            var responseMediaType = httpContent.Headers.ContentType?.MediaType ?? "application/json; charset=utf-8";
             var memory = contentBytes.AsMemory();
 
             var encodingResolver = new EncodingResolver();
+            var responseMediaType = httpContent.Headers.ContentType?.MediaType ?? "application/json; charset=utf-8";
             var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.JourneyContext.DefaultEncoding);
 
             StreamReader textReader = new StreamReader(new MemoryStream(contentBytes), encoding);

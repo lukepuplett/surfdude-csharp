@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Evoq.Surfdude.Hypertext;
 
-namespace Evoq.Surfdude
+namespace Evoq.Surfdude.Hypertext.Http
 {
-    public class ReadIntoModelStep<TModel> : IStep where TModel : class
+    internal class ReadIntoModelStep<TModel> : IStep where TModel : class
     {
         private readonly HttpClient httpClient;
         private readonly JourneyContext context;

@@ -8,9 +8,9 @@
 
         IJourneySteps VisitItem(int index);
 
-        IJourneySteps Send(string relation, object form);
+        IJourneySteps Send(string relation, object transferObject);
 
-        IJourneySteps CopyInto<TModel>(out TModel model) where TModel : class;
+        IJourneySteps Receive<TTransferModel>(out TTransferModel transferObject) where TTransferModel : class;
 
         Task<JourneyReport> RunAsync(System.Threading.CancellationToken cancellationToken = default);
     }

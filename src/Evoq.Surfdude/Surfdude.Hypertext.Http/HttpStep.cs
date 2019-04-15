@@ -1,4 +1,4 @@
-﻿namespace Evoq.Surfdude
+﻿namespace Evoq.Surfdude.Hypertext.Http
 {
     using Evoq.Surfdude.Hypertext;
     using System;
@@ -9,11 +9,6 @@
 
     public abstract class HttpStep : IStep
     {
-        internal static readonly string MethodControlName = "method";
-        internal static readonly string IfMatchControlName = "if-match";
-
-        //
-
         public HttpStep(HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
         {
             this.HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -29,7 +24,7 @@
 
         //
 
-        protected HttpResponseMessage Response { get; set; }
+        protected internal HttpResponseMessage Response { get; set; }
 
         protected IHypertextResourceFormatter ResourceFormatter { get; }
 
@@ -41,7 +36,7 @@
 
         public async Task RunAsync(IStep previous)
         {
-            this.Response = await this.InvokeRequestAsync((HttpStep)previous);
+            this.Response = await this.ExecuteStepRequestAsync((HttpStep)previous);
 
             if (!this.JourneyContext.IgnoreBadResults)
             {
@@ -58,12 +53,12 @@
             this.Resource = await this.ResourceFormatter.ReadResourceAsync(this.Response.Content);
         }
 
-        internal abstract Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous);
+        internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous);
 
         protected Task<HttpResponseMessage> InvokeHttpMethodAsync(string url, IEnumerable<KeyValuePair<string, string>> controlData, HttpContent httpContent = null)
         {
-            string methodValue = controlData.FirstOrDefault(cd => cd.Key == MethodControlName).Value ?? HttpMethod.Get.Method;
-                        
+            string methodValue = controlData.FirstOrDefault(cd => cd.Key == HttpControlData.MethodControlName).Value?.ToLowerInvariant() ?? HttpMethod.Get.Method;
+
             if (HttpMethod.Get.Method == methodValue)
             {
                 return this.HttpClient.GetAsync(url);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Evoq.Surfdude
+namespace Evoq.Surfdude.Hypertext.Http
 {
     internal class VisitItemStep : HttpStep
     {
@@ -20,7 +20,7 @@ namespace Evoq.Surfdude
 
         //
 
-        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous)
+        internal override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
         {
             var itemControl = previous.Resource.GetItem(this.Index).GetControl("item");
 
