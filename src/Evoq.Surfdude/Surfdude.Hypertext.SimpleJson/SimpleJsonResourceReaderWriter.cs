@@ -1,12 +1,13 @@
 ﻿namespace Evoq.Surfdude.Hypertext.SimpleJson
 {
     using System;
+    using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    internal class SimpleJsonResourceReader
+    internal class SimpleJsonResourceReaderWriter : IHypertextResourceFormatter
     {
-        public SimpleJsonResourceReader(JourneyContext context)
+        public SimpleJsonResourceReaderWriter(JourneyContext context)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -27,7 +28,14 @@
             var encodingResolver = new EncodingResolver();
             var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.JourneyContext.DefaultEncoding);
 
-            return new HypertextResource(memory, encoding);
+            StreamReader textReader = new StreamReader(new MemoryStream(contentBytes), encoding);
+
+            Newtonsoft.Json.JsonTextReader jsonTextReader = new Newtonsoft.Json.JsonTextReader(textReader);
+            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+            
+            var documentModel = serializer.Deserialize<SimpleDocumentModel>(jsonTextReader);
+
+            return new SimpleHypertextResource(documentModel);
         }
     }
 }

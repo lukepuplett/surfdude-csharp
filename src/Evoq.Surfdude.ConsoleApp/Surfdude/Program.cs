@@ -9,13 +9,12 @@
     {
         static async Task Main(string[] args)
         {
-            var report = await Journey.Start(args?.FirstOrDefault() ?? "https://private-0dcfd-usermanagementbackend.apiary-mock.com")
+            var report = await Journey.Start(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                 .FromRoot()
-                .FollowLink("user-management:invite")
-                .FollowLink("user-management:email-invitation")
-                .OpenItem(0)
-                .Submit("form", new { phrase = "beans" })
-                .Read<Model>(out Model model)
+                .Visit("registrations")                
+                .VisitItem(0)
+                .Send("update-contact-details", new { phrase = "beans" })
+                .CopyInto<Model>(out Model model)
                 .RunAsync();
 
             foreach(var line in report.Lines)

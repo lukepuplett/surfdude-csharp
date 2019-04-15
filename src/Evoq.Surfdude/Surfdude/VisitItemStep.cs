@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Evoq.Surfdude
 {
-    internal class OpenItemStep : HttpRequestStep
+    internal class VisitItemStep : HttpStep
     {
-        public OpenItemStep(int index, HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
-            : base(httpClient, journeyContext, readResource)
+        public VisitItemStep(int index, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+            : base(httpClient, journeyContext, resourceFormatter)
         {
             this.Index = index;
         }
@@ -20,7 +20,7 @@ namespace Evoq.Surfdude
 
         //
 
-        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
+        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous)
         {
             var itemControl = previous.Resource.GetItem(this.Index).GetControl("item");
 

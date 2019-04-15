@@ -1,48 +1,49 @@
 ﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext;
     using Evoq.Surfdude.Hypertext.SimpleJson;
     using System;
     using System.Net.Http;
 
-    public class StepFactory
+    public class StepFactory // Refactor into IServiceProvider.Get<FromRootStep>()
     {
         public StepFactory(JourneyContext context)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
-            this.ResourceReader = new SimpleJsonResourceReader(context);
+            this.ResourceFormatter = new SimpleJsonResourceReaderWriter(context);
         }
 
         //
 
         public JourneyContext JourneyContext { get; }
 
-        private SimpleJsonResourceReader ResourceReader { get; }
+        private IHypertextResourceFormatter ResourceFormatter { get; }
 
         //
 
         protected internal virtual IStep GetFromRootStep(JourneyContext context)
         {
-            return new FromRootStep(this.GetHttpClient(), context, this.ResourceReader.ReadResourceAsync);
+            return new FromRootStep(this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetFollowLinkStep(string rel, JourneyContext context)
+        protected internal virtual IStep GetVisitStep(string rel, JourneyContext context)
         {
-            return new FollowLinkStep(rel, this.GetHttpClient(), context, this.ResourceReader.ReadResourceAsync);
+            return new VisitStep(rel, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetOpenItemStep(int index, JourneyContext context)
+        protected internal virtual IStep GetVisitItemStep(int index, JourneyContext context)
         {
-            return new OpenItemStep(index, this.GetHttpClient(), context, this.ResourceReader.ReadResourceAsync);
+            return new VisitItemStep(index, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetSubmitStep(string rel, JourneyContext context)
+        protected internal virtual IStep GetSendStep(string rel, object form, JourneyContext context)
         {
-            return new SubmitStep(rel, this.GetHttpClient(), context, this.ResourceReader.ReadResourceAsync);
+            return new SendStep(rel, form, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
         protected internal virtual IStep GetFinalStep(JourneyContext context)
         {
-            return new FinalStep(this.GetHttpClient(), context, this.ResourceReader.ReadResourceAsync);
+            return new FinalStep(this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
         internal ReadIntoModelStep<TModel> GetReadIntoModelStep<TModel>(JourneyContext context) where TModel : class

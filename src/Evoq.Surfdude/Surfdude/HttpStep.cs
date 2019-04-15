@@ -7,18 +7,18 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    public abstract class HttpRequestStep : IStep
+    public abstract class HttpStep : IStep
     {
         internal static readonly string MethodControlName = "method";
         internal static readonly string IfMatchControlName = "if-match";
 
         //
 
-        public HttpRequestStep(HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
+        public HttpStep(HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
         {
-            this.HttpClient = httpClient ?? throw new System.ArgumentNullException(nameof(httpClient));
-            this.JourneyContext = journeyContext ?? throw new System.ArgumentNullException(nameof(journeyContext));
-            this.ReadResource = readResource ?? throw new ArgumentNullException(nameof(readResource));
+            this.HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this.JourneyContext = journeyContext ?? throw new ArgumentNullException(nameof(journeyContext));
+            this.ResourceFormatter = resourceFormatter ?? throw new ArgumentNullException(nameof(resourceFormatter));
         }
 
         //
@@ -31,7 +31,7 @@
 
         protected HttpResponseMessage Response { get; set; }
 
-        protected Func<HttpContent, Task<IHypertextResource>> ReadResource { get; }
+        protected IHypertextResourceFormatter ResourceFormatter { get; }
 
         protected JourneyContext JourneyContext { get; }
 
@@ -41,7 +41,7 @@
 
         public async Task RunAsync(IStep previous)
         {
-            this.Response = await this.InvokeRequestAsync((HttpRequestStep)previous);
+            this.Response = await this.InvokeRequestAsync((HttpStep)previous);
 
             if (!this.JourneyContext.IgnoreBadResults)
             {
@@ -55,10 +55,10 @@
                 }
             }
 
-            this.Resource = await this.ReadResource(this.Response.Content);
+            this.Resource = await this.ResourceFormatter.ReadResourceAsync(this.Response.Content);
         }
 
-        internal abstract Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous);
+        internal abstract Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous);
 
         protected Task<HttpResponseMessage> InvokeHttpMethodAsync(string url, IEnumerable<KeyValuePair<string, string>> controlData, HttpContent httpContent = null)
         {

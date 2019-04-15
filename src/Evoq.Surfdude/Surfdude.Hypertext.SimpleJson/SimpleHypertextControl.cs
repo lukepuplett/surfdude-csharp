@@ -17,8 +17,8 @@
 
         public IEnumerable<KeyValuePair<string, string>> ControlData => new []
         {
-            new KeyValuePair<string, string>(HttpRequestStep.MethodControlName, this.Method),
-            new KeyValuePair<string, string>(HttpRequestStep.IfMatchControlName, this.IfMatch)
+            new KeyValuePair<string, string>(HttpStep.MethodControlName, this.Method),
+            new KeyValuePair<string, string>(HttpStep.IfMatchControlName, this.IfMatch)
         };
 
         public bool RequiresInput => this.Inputs?.Any(i => !i.IsOptional) ?? false;

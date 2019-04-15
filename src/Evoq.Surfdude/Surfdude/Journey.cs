@@ -86,28 +86,28 @@
             return this;
         }
 
-        IJourneySteps IJourneySteps.FollowLink(string rel)
+        IJourneySteps IJourneySteps.Visit(string rel)
         {
-            this.steps.Add(this.StepFactory.GetFollowLinkStep(rel, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetVisitStep(rel, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.OpenItem(int index)
+        IJourneySteps IJourneySteps.VisitItem(int index)
         {
-            this.steps.Add(this.StepFactory.GetOpenItemStep(index, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetVisitItemStep(index, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Submit(string rel, object form)
+        IJourneySteps IJourneySteps.Send(string rel, object form)
         {
-            this.steps.Add(this.StepFactory.GetSubmitStep(rel, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetSendStep(rel, form, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Read<TModel>(out TModel model)
+        IJourneySteps IJourneySteps.CopyInto<TModel>(out TModel model)
         {
             var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.JourneyContext);
 

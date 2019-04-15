@@ -3,7 +3,7 @@
     using Evoq.Surfdude.Hypertext;
     using System.Threading.Tasks;
 
-    public interface IStep // Factor into IStepAction and IStepResult
+    public interface IStep
     {
         string Name { get; }
 

@@ -4,13 +4,13 @@
 
     public interface IJourneySteps
     {
-        IJourneySteps FollowLink(string relation);
+        IJourneySteps Visit(string relation);
 
-        IJourneySteps OpenItem(int index);
+        IJourneySteps VisitItem(int index);
 
-        IJourneySteps Submit(string relation, object form);
+        IJourneySteps Send(string relation, object form);
 
-        IJourneySteps Read<TModel>(out TModel model) where TModel : class;
+        IJourneySteps CopyInto<TModel>(out TModel model) where TModel : class;
 
         Task<JourneyReport> RunAsync(System.Threading.CancellationToken cancellationToken = default);
     }

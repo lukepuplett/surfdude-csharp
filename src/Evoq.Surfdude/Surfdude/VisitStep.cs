@@ -5,10 +5,10 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    internal class FollowLinkStep : HttpRequestStep
+    internal class VisitStep : HttpStep
     {
-        public FollowLinkStep(string rel, HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
-            : base(httpClient, journeyContext, readResource)
+        public VisitStep(string rel, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+            : base(httpClient, journeyContext, resourceFormatter)
         {
             if (string.IsNullOrWhiteSpace(rel))
             {
@@ -24,7 +24,7 @@
 
         //
 
-        internal override async Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
+        internal override async Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous)
         {
             IHypertextControl control = previous.Resource.GetControl(this.Rel);
 

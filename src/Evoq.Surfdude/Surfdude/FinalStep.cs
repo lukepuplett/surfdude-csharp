@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace Evoq.Surfdude
 {
-    internal class FinalStep : HttpRequestStep
+    internal class FinalStep : HttpStep
     {
-        public FinalStep(HttpClient httpClient, JourneyContext journeyContext, Func<HttpContent, Task<IHypertextResource>> readResource)
-            : base(httpClient, journeyContext, readResource)
+        public FinalStep(HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+            : base(httpClient, journeyContext, resourceFormatter)
         {
         }
 
-        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpRequestStep previous)
+        internal override Task<HttpResponseMessage> InvokeRequestAsync(HttpStep previous)
         {
             throw new System.NotImplementedException();
         }
