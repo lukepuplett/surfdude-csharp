@@ -9,6 +9,8 @@
 
         public SimpleControlCollection Links { get; set; } = new SimpleControlCollection();
 
+        //
+
         public IHypertextControl GetControl(string rel)
         {
             return this.Links.GetControl(rel);

@@ -11,9 +11,15 @@
 
         public string Method { get; set; }
 
-        public IEnumerable<Input> Inputs { get; }
+        public string IfMatch { get; set; }
 
-        public IDictionary<string, RequestData> RequestData { get; }
+        public IEnumerable<InputControl> Inputs { get; }
+
+        public IEnumerable<KeyValuePair<string, string>> ControlData => new []
+        {
+            new KeyValuePair<string, string>(HttpRequestStep.MethodControlName, this.Method),
+            new KeyValuePair<string, string>(HttpRequestStep.IfMatchControlName, this.IfMatch)
+        };
 
         public bool RequiresInput => this.Inputs?.Any(i => !i.IsOptional) ?? false;
     }

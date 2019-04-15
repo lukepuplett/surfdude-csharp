@@ -4,10 +4,8 @@
 
     public interface IHypertextControl : IHyperlink
     {
-        string Method { get; set; }
+        IEnumerable<InputControl> Inputs { get; }
 
-        IEnumerable<Input> Inputs { get; }
-
-        IDictionary<string, RequestData> RequestData { get; }
+        IEnumerable<KeyValuePair<string, string>> ControlData { get; }
     }
 }
