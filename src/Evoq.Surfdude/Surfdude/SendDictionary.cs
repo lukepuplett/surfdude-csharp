@@ -33,13 +33,13 @@
         {
             if (sendModel is IEnumerable<KeyValuePair<string, string>> sendPairs)
             {
-                sendPairs.ToDictionary(pair => pair.Key);
+                return sendPairs.ToDictionary(pair => pair.Key, pair => pair.Value);
             }
-            if (sendModel is IDictionary sendDic)
+            else if (sendModel is IDictionary sendDic)
             {
                 var sendBag = new Dictionary<string, string>(sendDic.Count);
 
-                foreach(var key in sendDic.Keys)
+                foreach (object key in sendDic.Keys)
                 {
                     sendBag.Add(key.ToString(), sendDic[key].ToString());
                 }
