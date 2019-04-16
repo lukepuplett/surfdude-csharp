@@ -1,38 +1,43 @@
 ﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public class Journey : IJourneyStart, IJourneySteps
+    public abstract class JourneyBuilder : IJourneyStart, IJourneySteps
     {
         private readonly List<IStep> steps = new List<IStep>(20);
 
         //
+        public JourneyBuilder() { }
 
-        internal Journey(JourneyContext context, StepFactory stepFactory = null)
+        protected JourneyBuilder(JourneyContext context, IHypertextResourceFormatter resourceFormatter)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
-            this.StepFactory = stepFactory ?? new StepFactory(context);
+            this.StepFactory = new StepFactory(context, resourceFormatter);
+        }
+
+        protected JourneyBuilder(JourneyContext context, StepFactory stepFactory)
+        {
+            this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
+            this.StepFactory = stepFactory ?? throw new ArgumentNullException(nameof(stepFactory));
         }
 
         //
 
-        public static IJourneyStart Start(string location)
-        {
-            return Start(new JourneyContext(location));
-        }
+        protected JourneyContext JourneyContext { get; }
 
-        public static IJourneyStart Start(JourneyContext context)
-        {
-            return new Journey(context);
-        }
+        protected StepFactory StepFactory { get; }
 
         //
 
-        public JourneyContext JourneyContext { get; }
+        public IJourneySteps FromRoot()
+        {
+            this.steps.Add(this.StepFactory.GetFromRootStep(this.JourneyContext));
 
-        public StepFactory StepFactory { get; }
+            return this;
+        }
 
         //
 
@@ -76,35 +81,28 @@
             return report;
         }
 
-        IJourneySteps IJourneyStart.FromRoot()
-        {
-            this.steps.Add(this.StepFactory.GetFromRootStep(this.JourneyContext));
-
-            return this;
-        }
-
-        IJourneySteps IJourneySteps.Visit(string rel)
+        IJourneySteps IJourneySteps.Request(string rel)
         {
             this.steps.Add(this.StepFactory.GetVisitStep(rel, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.VisitItem(int index)
+        IJourneySteps IJourneySteps.RequestItem(int index)
         {
             this.steps.Add(this.StepFactory.GetVisitItemStep(index, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Send(string rel, object transferObject)
+        IJourneySteps IJourneySteps.Submit(string rel, object transferObject)
         {
             this.steps.Add(this.StepFactory.GetSendStep(rel, transferObject, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Receive<TModel>(out TModel model)
+        IJourneySteps IJourneySteps.Read<TModel>(out TModel model)
         {
             var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.JourneyContext);
 

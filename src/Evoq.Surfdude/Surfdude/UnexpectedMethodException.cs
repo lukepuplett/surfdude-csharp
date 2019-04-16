@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Evoq.Surfdude
 {
     [Serializable]
-    internal class UnexpectedMethodException : Exception
+    public class UnexpectedMethodException : Exception
     {
         public UnexpectedMethodException()
         {

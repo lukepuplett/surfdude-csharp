@@ -5,9 +5,9 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    internal class VisitStep : HttpStep
+    internal class RequestStep : HttpStep
     {
-        public VisitStep(string rel, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public RequestStep(string rel, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
             : base(httpClient, journeyContext, resourceFormatter)
         {
             if (string.IsNullOrWhiteSpace(rel))

@@ -11,10 +11,10 @@
         {
             var report = await Journey.Start(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                 .FromRoot()
-                .Visit("registrations")                
-                .VisitItem(0)
-                .Send("update-contact-details", new { phrase = "beans" })
-                .Receive(out ResourceModel model)
+                .Request("registrations")                
+                .RequestItem(0)
+                .Submit("update-contact-details", new { phrase = "beans" })
+                .Read(out ResourceModel model)
                 .RunAsync();
 
             foreach(var line in report.Lines)

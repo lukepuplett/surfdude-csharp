@@ -1,23 +1,26 @@
-﻿using System.Text;
-
-namespace Evoq.Surfdude
+﻿namespace Evoq.Surfdude
 {
+    using System.Threading;
+
     public class JourneyContext
     {
-        public JourneyContext(string location)
+        public JourneyContext(string rootUri, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrWhiteSpace(location))
+            if (string.IsNullOrWhiteSpace(rootUri))
             {
-                throw new System.ArgumentException("The location is null or whitespace.", nameof(location));
+                throw new ArgumentNullOrWhitespaceException(nameof(rootUri));
             }
-
-            this.StartingLocation = location;
+            
+            this.RootUri = rootUri;
+            this.CancellationToken = cancellationToken;
         }
+        
+        //
 
-        public string StartingLocation { get; }
+        public string RootUri { get; }
 
         public bool IgnoreBadResults { get; set; } = false;
 
-        public Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+        public CancellationToken CancellationToken { get; }
     }
 }

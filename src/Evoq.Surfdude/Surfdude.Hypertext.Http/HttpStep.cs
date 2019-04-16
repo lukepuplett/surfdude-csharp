@@ -36,6 +36,8 @@
 
         public async Task RunAsync(IStep previous)
         {
+            this.JourneyContext.CancellationToken.ThrowIfCancellationRequested();
+
             this.Response = await this.ExecuteStepRequestAsync((HttpStep)previous);
 
             if (!this.JourneyContext.IgnoreBadResults)
@@ -50,36 +52,9 @@
                 }
             }
 
-            this.Resource = await this.ResourceFormatter.ReadResourceAsync(this.Response.Content);
+            this.Resource = await this.ResourceFormatter.FromResponseAsync(this.Response);
         }
 
         internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous);
-
-        protected Task<HttpResponseMessage> InvokeHttpMethodAsync(string url, IEnumerable<KeyValuePair<string, string>> controlData, HttpContent httpContent = null)
-        {
-            string methodValue = controlData.FirstOrDefault(cd => cd.Key == HttpControlData.MethodControlName).Value?.ToLowerInvariant() ?? HttpMethod.Get.Method;
-
-            if (HttpMethod.Get.Method == methodValue)
-            {
-                return this.HttpClient.GetAsync(url);
-            }
-            else if (HttpMethod.Put.Method == methodValue)
-            {
-                return this.HttpClient.PutAsync(url, httpContent);
-            }
-            else if (HttpMethod.Post.Method == methodValue)
-            {
-                return this.HttpClient.PostAsync(url, httpContent);
-            }
-            else if (HttpMethod.Delete.Method == methodValue)
-            {
-                return this.HttpClient.DeleteAsync(url);
-            }
-            else
-            {
-                throw new UnexpectedMethodException(
-                    $"Could not determine the HTTP method to use in the request. The method '{methodValue}' in the control data was not recognised or is unsupported.");
-            }
-        }
     }
 }

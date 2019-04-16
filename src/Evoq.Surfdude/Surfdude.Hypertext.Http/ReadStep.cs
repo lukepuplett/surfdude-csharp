@@ -4,12 +4,12 @@ using Evoq.Surfdude.Hypertext;
 
 namespace Evoq.Surfdude.Hypertext.Http
 {
-    internal class ReadIntoModelStep<TModel> : IStep where TModel : class
+    internal class ReadStep<TModel> : IStep where TModel : class
     {
         private readonly HttpClient httpClient;
         private readonly JourneyContext context;
 
-        public ReadIntoModelStep(HttpClient httpClient, JourneyContext context)
+        public ReadStep(HttpClient httpClient, JourneyContext context)
         {
             this.httpClient = httpClient;
             this.context = context;

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Evoq.Surfdude.Hypertext
 {
     [Serializable]
-    internal class RelationNotFoundException : Exception
+    public class RelationNotFoundException : Exception
     {
         private string v;
         private object invalidOperation;

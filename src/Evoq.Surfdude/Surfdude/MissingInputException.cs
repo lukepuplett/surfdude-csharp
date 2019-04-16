@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Evoq.Surfdude
 {
     [Serializable]
-    internal class MissingInputException : Exception
+    public class MissingInputException : Exception
     {
         public MissingInputException()
         {

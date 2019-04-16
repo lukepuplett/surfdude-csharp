@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Evoq.Surfdude.SimpleJson\Evoq.Surfdude.SimpleJson.csproj" />
     <ProjectReference Include="..\Evoq.Surfdude\Evoq.Surfdude.csproj" />
   </ItemGroup>
 

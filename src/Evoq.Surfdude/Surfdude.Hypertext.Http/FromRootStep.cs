@@ -14,7 +14,7 @@ namespace Evoq.Surfdude.Hypertext.Http
 
         internal async override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
         {
-            return await this.HttpClient.GetAsync(this.JourneyContext.StartingLocation);
+            return await this.HttpClient.GetAsync(this.JourneyContext.RootUri);
         }
     }
 }

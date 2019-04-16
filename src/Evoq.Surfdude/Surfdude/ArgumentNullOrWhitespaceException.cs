@@ -2,7 +2,7 @@
 
 namespace Evoq.Surfdude
 {
-    internal class ArgumentNullOrWhitespaceException : ArgumentException
+    public class ArgumentNullOrWhitespaceException : ArgumentException
     {
         public ArgumentNullOrWhitespaceException()
         {
