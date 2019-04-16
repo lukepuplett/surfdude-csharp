@@ -1,5 +1,7 @@
 # Surfdude
 
+Because you can surf the best APIs.
+
 A simple little hypermedia client that dynamically drives a REST API. You can use this to test that an API is genuinely
 RESTful, i.e. it can be driven entirely by links and hypertext transfer, or you can use this in your application to work
 a backend API.
