@@ -41,7 +41,16 @@ As Roy Fielding explained, most of the effort in designing a REST API should go 
 
 The JSON, HTML or XML of your API should contain hypermedia controls that contain all the information needed for the client
 to make use of those controls. For HTML the `<a>` and `<form>` tags come with clear processing instructions for web browser
-clients to make use of these controls whenever they are encountered. The upshot of this uniformity is that website need no
-further documentation.
+clients to make use of these controls whenever they are encountered.
+
+The upshot of this uniformity is that a nice website needs no further documentation; if the browser cannot work with the
+HTML then there is a bug. If a website needs a user manual then there is a serious UX issue. The same is true of an API.
 
 Surfude lets you replace the classes that read and process your hypertext resources and their controls.
+
+## Evolving APIs
+
+Websites change over time and yet customers rarely notice. Their experience remains uninterrupted, the links keep working
+and adding an item to a shopping cart continues to work, if though the underlying resources are changing all day.
+
+A great API using a dynamic client affords the same flexibility since interactions are loosely based on relation names.
