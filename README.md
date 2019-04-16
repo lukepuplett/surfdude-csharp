@@ -10,17 +10,18 @@ Designing APIs by writing the desired client code first tends to drive out much 
 
 ## API UX and Interaction Journeys
 
-The premise is that, like a website, a well designed REST API is centred around the client's needs and problems 
+The premise is that, like a website, a well designed API is centred around the client's needs and problems 
 much like Design Thinking for the websites of the world.
 
-This ultimately leads to thinking of the things that a
-client would like to do and their journey through the API to get those things done. At each stage of the journey
-there is opportunity to feedback and inform the client of the impact of any changes and to present alternative
-options and possible next interactions.
+This ultimately leads to thinking of the things that a client would like to do and their journey through the API to get
+those things done. At each stage of the journey there is opportunity to feedback and inform the client of the impact of
+any changes and to present alternative options and possible next interactions.
 
 ## Sample
 
-Surfdude makes this kind of code possible.
+Surfdude makes this kind of code possible. Notice how the protocol methods and resource identifiers are completely absent,
+reinforcing the notion that URLs cannot themselves be RESTful; a machine cares not for pluralised nouns and semantic
+structure.
 
 	var report = await Journey.Start("https://private-ac89c-surfdude.apiary-mock.com/")
 		.FromRoot()
