@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
 
     class Program
@@ -11,15 +10,17 @@
         {
             var report = await Journey.Start(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                 .FromRoot()
-                .Request("registrations")                
+                .Request("registrations")
                 .RequestItem(0)
-                .Submit("update-contact-details", new { phrase = "beans" })
-                .Read(out Func<ResourceModel> get)
+                .Submit("update-contact-details", new { email = "mike@beans.com" })
+                .Read(out Func<ResourceModel> getContactDetails)
+                .Request("registration")
+                .Submit("add-processing-instruction", new { message = "Put NO-SPAM in the email subject." })
                 .RunAsync();
 
-            Console.WriteLine(get().email);
+            Console.WriteLine(getContactDetails().Email);
 
-            foreach(var line in report.Lines)
+            foreach (var line in report.Lines)
             {
                 Console.WriteLine(line.Message);
             }
@@ -30,6 +31,6 @@
 
     internal class ResourceModel
     {
-        public string email { get; set; }
+        public string Email { get; set; }
     }
 }

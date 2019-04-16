@@ -21,11 +21,18 @@
                 throw new ArgumentNullException(nameof(rel));
             }
 
-            IHypertextControl control = this.FirstOrDefault(c => rel.Equals(c.Rel, StringComparison.OrdinalIgnoreCase));
+            if (this.Count == 0)
+            {
+                throw new RelationNotFoundException($"Could not find a hyperlink with relation '{rel}'. There are no hyperlinks on the resource.");
+            }
+            else
+            {
+                IHypertextControl control = this.FirstOrDefault(c => rel.Equals(c.Rel, StringComparison.OrdinalIgnoreCase));
 
-            return control ??
-                throw new RelationNotFoundException(
-                    $"Could not find a hyperlink with relation '{rel}'. The available relations are '{string.Join(", ", GetRelations())}'");
+                return control ??
+                    throw new RelationNotFoundException(
+                        $"Could not find a hyperlink with relation '{rel}'. The available relations are '{string.Join(", ", GetRelations())}'");
+            }
         }
 
         public IEnumerable<string> GetRelations()

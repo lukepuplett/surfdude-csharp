@@ -3,6 +3,7 @@
     public interface IHypertextInputControl
     {
         string Name { get; }
+
         bool IsOptional { get; }
     }
 }

@@ -14,7 +14,9 @@
 
         public string IfMatch { get; set; }
 
-        public IEnumerable<IHypertextInputControl> Inputs { get; }
+        public IEnumerable<SimpleInputControl> Form { get; set; }
+
+        public IEnumerable<IHypertextInputControl> Inputs => this.Form;
 
         public IEnumerable<KeyValuePair<string, string>> ControlData => new []
         {

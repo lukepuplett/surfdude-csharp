@@ -59,7 +59,7 @@
 
             if (hypertextControl.Inputs != null)
             {
-                this.ThrowOnMissingInputs(sendPairs, hypertextControl);
+                this.CheckInputs(sendPairs, hypertextControl);
             }
 
             HttpRequestMessage httpRequest;
@@ -72,9 +72,9 @@
             }
             else
             {
-                httpRequest = new HttpRequestMessage(hypertextControl.GetHttpMethod(), this.PrepareUri(sendPairs, hypertextControl));                
+                httpRequest = new HttpRequestMessage(hypertextControl.GetHttpMethod(), this.PrepareUri(sendPairs, hypertextControl));
             }
-            
+
             httpRequest.Headers.Accept.ParseAdd(this.DefaultMediaType);
             httpRequest.Headers.AcceptCharset.ParseAdd(this.DefaultCharSet);
 
@@ -115,7 +115,16 @@
 
                 foreach (var input in hypertextControl.Inputs)
                 {
-                    explicitlyDefinedPairs.Add(input.Name, sendPairs[input.Name]);
+                    if (sendPairs.TryGetValue(input.Name, out string sendValue))
+                    {
+                        explicitlyDefinedPairs.Add(input.Name, sendValue);
+                    }
+                    else if (!input.IsOptional)
+                    {
+                        throw new InvalidOperationException(
+                            "Cannot prepare the HTTP content. A missing input was unexpected. Ensure " +
+                            "all required fields are present before calling this method.");
+                    }
                 }
 
                 jsonBodyString = Newtonsoft.Json.JsonConvert.SerializeObject(explicitlyDefinedPairs);
@@ -133,32 +142,66 @@
             return httpContent;
         }
 
-        private void ThrowOnMissingInputs(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
+        private void CheckInputs(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
         {
-            var inputControls = hypertextControl.Inputs;
+            string[] overlapping = this.GetOverlapping(sendPairs.Keys, hypertextControl.Inputs);
+            if (overlapping.Length == 0)
+            {
+                string[] allInputs = hypertextControl.Inputs.Select(i => i.Name).ToArray();
 
-            string[] missingRequired = this.GetMissingRequired(sendPairs.Keys, inputControls);
+                throw CreateMissingInputException(hypertextControl, sendPairs.Keys, allInputs);
+            }
+
+            //
+
+            string[] missingRequired = this.GetMissingRequired(sendPairs.Keys, hypertextControl.Inputs);
             if (missingRequired.Length > 0)
             {
-                var missingInputException = new MissingInputException(
-                    $"Unable to prepare the representation to send. The control associated with " +
-                    $"relation '{hypertextControl.Rel}' requires the following inputs '{String.Join(", ", missingRequired)}'.");
-
-                foreach (string m in missingRequired)
-                {
-                    missingInputException.Data.Add(m, "missing");
-                }
-
-                throw missingInputException;
+                throw CreateMissingInputException(hypertextControl, sendPairs.Keys, missingRequired);
             }
+        }
+
+        private static MissingInputException CreateMissingInputException(IHypertextControl hypertextControl, IEnumerable<string> sendKeys, string[] missing)
+        {
+            string message;
+
+            if (sendKeys.Any())
+            {
+                message = $"Unable to prepare the representation to send. The control associated with " +
+                    $"relation '{hypertextControl.Rel}' defines the input(s) '{String.Join(", ", missing)}'" +
+                    $" not found in the data being sent, '{String.Join(", ", sendKeys)}'.";
+            }
+            else
+            {
+                message = $"Unable to prepare the representation to send. The control associated with " +
+                    $"relation '{hypertextControl.Rel}' defines the input(s) '{String.Join(", ", missing)}'" +
+                    $" but there is no data being sent.";
+            }
+
+            var missingInputException = new MissingInputException(message);
+
+            foreach (string m in missing)
+            {
+                missingInputException.Data.Add(m, "missing");
+            }
+
+            return missingInputException;
+        }
+
+        private string[] GetOverlapping(IEnumerable<string> sendKeys, IEnumerable<IHypertextInputControl> inputs)
+        {
+            return inputs
+                .Select(i => i.Name)
+                .Intersect(sendKeys, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
         }
 
         private string[] GetMissingRequired(IEnumerable<string> sendKeys, IEnumerable<IHypertextInputControl> inputs)
         {
             return inputs.GetRequiredHypertextControls()
                 .Select(i => i.Name)
-                .Except(sendKeys)
+                .Except(sendKeys, StringComparer.OrdinalIgnoreCase)
                 .ToArray();
-        }        
+        }
     }
 }

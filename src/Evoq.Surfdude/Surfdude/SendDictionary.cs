@@ -1,9 +1,9 @@
 ﻿namespace Evoq.Surfdude
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     public sealed class SendDictionary : Dictionary<string, string>
     {
@@ -20,7 +20,7 @@
             }
         }
 
-        public SendDictionary(object sendModel) 
+        public SendDictionary(object sendModel)
             : base(CreateDictionaryFrom(sendModel))
         {
             if (sendModel == null)
@@ -31,15 +31,33 @@
 
         private static IDictionary<string, string> CreateDictionaryFrom(object sendModel)
         {
-            var sendProperties = sendModel.GetType().GetProperties().ToArray();
-            var sendBag = new Dictionary<string, string>(sendProperties.Length);
-
-            foreach (var property in sendProperties)
+            if (sendModel is IEnumerable<KeyValuePair<string, string>> sendPairs)
             {
-                sendBag.Add(property.Name, property.GetValue(sendModel).ToString());
+                sendPairs.ToDictionary(pair => pair.Key);
             }
+            if (sendModel is IDictionary sendDic)
+            {
+                var sendBag = new Dictionary<string, string>(sendDic.Count);
 
-            return sendBag;
+                foreach(var key in sendDic.Keys)
+                {
+                    sendBag.Add(key.ToString(), sendDic[key].ToString());
+                }
+
+                return sendBag;
+            }
+            else
+            {
+                var sendProperties = sendModel.GetType().GetProperties().ToArray();
+                var sendBag = new Dictionary<string, string>(sendProperties.Length);
+
+                foreach (var property in sendProperties)
+                {
+                    sendBag.Add(property.Name, property.GetValue(sendModel).ToString());
+                }
+
+                return sendBag;
+            }
         }
     }
 }
