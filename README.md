@@ -34,3 +34,14 @@ structure.
 		.RunAsync();
 
 	Console.WriteLine(getContactDetails().Email);
+
+## Bring Your Own Media-Type
+
+As Roy Fielding explained, most of the effort in designing a REST API should go into designing the media-type.
+
+The JSON, HTML or XML of your API should contain hypermedia controls that contain all the information needed for the client
+to make use of those controls. For HTML the `<a>` and `<form>` tags come with clear processing instructions for web browser
+clients to make use of these controls whenever they are encountered. The upshot of this uniformity is that website need no
+further documentation.
+
+Surfude lets you replace the classes that read and process your hypertext resources and their controls.
