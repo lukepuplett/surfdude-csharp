@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude
 {
     using Evoq.Surfdude.Hypertext;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public interface IStep
@@ -9,6 +10,6 @@
 
         IHypertextResource Resource { get; }
 
-        Task RunAsync(IStep previous);
+        Task RunAsync(IStep previous, CancellationToken cancellationToken);
     }
 }

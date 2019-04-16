@@ -22,37 +22,30 @@
 
         public string DefaultMediaType { get; } = "application/simple-hypertext+json";
 
-        public string DefaultCharSet { get; } = "charset=utf-8";
+        public string DefaultCharSet { get; } = "utf-8";
 
         public Encoding DefaultEncoding { get; } = Encoding.UTF8;
 
         //
 
-        public async Task<IHypertextResource> FromResponseAsync(HttpResponseMessage httpResponse)
+        public Task<TModel> ReadAsModelAsync<TModel>(HttpResponseMessage httpResponse)
+        {
+            return this.Deserialize<TModel>(httpResponse);
+        }
+
+        public async Task<IHypertextResource> ReadAsResourceAsync(HttpResponseMessage httpResponse)
         {
             if (httpResponse == null)
             {
                 throw new ArgumentNullException(nameof(httpResponse));
             }
 
-            var httpContent = httpResponse.Content;
-            byte[] contentBytes = await httpContent.ReadAsByteArrayAsync();
-
-            var encodingResolver = new EncodingResolver();
-            string responseMediaType = httpContent.Headers.ContentType?.MediaType ?? this.DefaultMediaType;
-            var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.DefaultEncoding);
-
-            var textReader = new StreamReader(new MemoryStream(contentBytes), encoding);
-
-            var jsonTextReader = new Newtonsoft.Json.JsonTextReader(textReader);
-            var serializer = new Newtonsoft.Json.JsonSerializer();
-
-            var documentModel = serializer.Deserialize<SimpleDocumentModel>(jsonTextReader);
+            var documentModel = await this.Deserialize<SimpleDocumentModel>(httpResponse);
 
             return new SimpleHypertextResource(documentModel);
         }
 
-        public HttpRequestMessage ToRequest(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
+        public HttpRequestMessage BuildRequest(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
         {
             if (sendPairs == null)
             {
@@ -86,6 +79,25 @@
             httpRequest.Headers.AcceptCharset.ParseAdd(this.DefaultCharSet);
 
             return httpRequest;
+        }
+
+        //
+
+        private async Task<T> Deserialize<T>(HttpResponseMessage httpResponse)
+        {
+            var httpContent = httpResponse.Content;
+            byte[] contentBytes = await httpContent.ReadAsByteArrayAsync();
+
+            var encodingResolver = new EncodingResolver();
+            string responseMediaType = httpContent.Headers.ContentType?.MediaType ?? this.DefaultMediaType;
+            var encoding = encodingResolver.ResolveEncoding(responseMediaType, this.DefaultEncoding);
+
+            var textReader = new StreamReader(new MemoryStream(contentBytes), encoding);
+
+            var jsonTextReader = new Newtonsoft.Json.JsonTextReader(textReader);
+            var serializer = new Newtonsoft.Json.JsonSerializer();
+
+            return serializer.Deserialize<T>(jsonTextReader);
         }
 
         private string PrepareUri(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
@@ -147,6 +159,6 @@
                 .Select(i => i.Name)
                 .Except(sendKeys)
                 .ToArray();
-        }
+        }        
     }
 }

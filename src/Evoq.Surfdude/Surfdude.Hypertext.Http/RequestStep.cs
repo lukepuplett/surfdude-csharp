@@ -3,6 +3,7 @@
     using Evoq.Surfdude.Hypertext;
     using System;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal class RequestStep : HttpStep
@@ -24,11 +25,11 @@
 
         //
 
-        internal override async Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
+        internal override async Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken)
         {
             IHypertextControl control = previous.Resource.GetControl(this.Rel);
 
-            return await this.HttpClient.GetAsync(control.HRef);
+            return await this.HttpClient.GetAsync(control.HRef, cancellationToken);
         }
     }
 }

@@ -26,24 +26,24 @@
             return new FromRootStep(this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetVisitStep(string rel, JourneyContext context)
+        protected internal virtual IStep GetRequestStep(string rel, JourneyContext context)
         {
             return new RequestStep(rel, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetVisitItemStep(int index, JourneyContext context)
+        protected internal virtual IStep GetRequestItemStep(int index, JourneyContext context)
         {
             return new RequestItemStep(index, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetSendStep(string rel, object transferObject, JourneyContext context)
+        protected internal virtual IStep GetSubmitStep(string rel, object transferObject, JourneyContext context)
         {
             return new SubmitStep(rel, transferObject, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        internal ReadStep<TModel> GetReadIntoModelStep<TModel>(JourneyContext context) where TModel : class
+        internal ReadStep<TModel> GetReadStep<TModel>(JourneyContext context, TModel[] models) where TModel : class
         {
-            return new ReadStep<TModel>(this.GetHttpClient(), context);
+            return new ReadStep<TModel>(models, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
         private HttpClient GetHttpClient()

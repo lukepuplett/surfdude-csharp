@@ -6,8 +6,10 @@
 
     public interface IHypertextResourceFormatter
     {
-        Task<IHypertextResource> FromResponseAsync(HttpResponseMessage httpResponse);
+        Task<TModel> ReadAsModelAsync<TModel>(HttpResponseMessage httpResponse);
 
-        HttpRequestMessage ToRequest(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl);
+        Task<IHypertextResource> ReadAsResourceAsync(HttpResponseMessage httpResponse);
+
+        HttpRequestMessage BuildRequest(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl);
     }
 }

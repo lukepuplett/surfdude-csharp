@@ -14,8 +14,10 @@
                 .Request("registrations")                
                 .RequestItem(0)
                 .Submit("update-contact-details", new { phrase = "beans" })
-                .Read(out ResourceModel model)
+                .Read(out Func<ResourceModel> get)
                 .RunAsync();
+
+            Console.WriteLine(get().email);
 
             foreach(var line in report.Lines)
             {
@@ -28,5 +30,6 @@
 
     internal class ResourceModel
     {
+        public string email { get; set; }
     }
 }

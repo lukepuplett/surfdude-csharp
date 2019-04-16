@@ -1,33 +1,29 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using Evoq.Surfdude.Hypertext;
-
-namespace Evoq.Surfdude.Hypertext.Http
+﻿namespace Evoq.Surfdude.Hypertext.Http
 {
-    internal class ReadStep<TModel> : IStep where TModel : class
-    {
-        private readonly HttpClient httpClient;
-        private readonly JourneyContext context;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Evoq.Surfdude.Hypertext;
 
-        public ReadStep(HttpClient httpClient, JourneyContext context)
+    internal class ReadStep<TModel> : HttpStep where TModel : class
+    {
+        private readonly TModel[] models;
+
+        public ReadStep(TModel[] models, HttpClient httpClient, JourneyContext context, IHypertextResourceFormatter resourceFormatter)
+            : base(httpClient, context, resourceFormatter)
         {
-            this.httpClient = httpClient;
-            this.context = context;
+            this.models = models ?? throw new System.ArgumentNullException(nameof(models));
         }
 
-        public TModel Model { get; internal set; }
+        //
 
-        public string Name => "ReadModelIntoStep<TModel>";
-
-        public IHypertextResource Resource => throw new System.NotImplementedException();
-
-        public Task RunAsync(IStep previous)
+        internal override async Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var m = await this.ResourceFormatter.ReadAsModelAsync<TModel>(previous.Response);
 
-            // Make HTTP request.
+            models[0] = m;
 
-            // this.Result = await this.HttpClient.GetAsync();
+            return previous.Response;
         }
     }
 }

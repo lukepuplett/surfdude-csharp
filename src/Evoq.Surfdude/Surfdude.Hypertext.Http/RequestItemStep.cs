@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Evoq.Surfdude.Hypertext.Http
@@ -24,7 +25,7 @@ namespace Evoq.Surfdude.Hypertext.Http
 
         //
 
-        internal override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
+        internal override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken)
         {
             var itemControl = previous.Resource.GetItem(this.Index).GetControl(ItemRelation);
 
@@ -39,7 +40,7 @@ namespace Evoq.Surfdude.Hypertext.Http
                 var firstRequiredInput = itemControl.Inputs?.FirstOrDefault(i => !i.IsOptional);
                 if (firstRequiredInput == null)
                 {
-                    return this.HttpClient.GetAsync(itemControl.HRef);
+                    return this.HttpClient.GetAsync(itemControl.HRef, cancellationToken);
                 }
                 else
                 {

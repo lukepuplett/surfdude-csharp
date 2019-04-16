@@ -10,7 +10,7 @@
 
         IJourneySteps Submit(string relation, object transferObject);
 
-        IJourneySteps Read<TTransferModel>(out TTransferModel transferObject) where TTransferModel : class;
+        IJourneySteps Read<TModel>(TModel[] models) where TModel : class;
 
         Task<JourneyReport> RunAsync(System.Threading.CancellationToken cancellationToken = default);
     }

@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public abstract class HttpStep : IStep
@@ -34,11 +35,9 @@
 
         //
 
-        public async Task RunAsync(IStep previous)
+        public async Task RunAsync(IStep previous, CancellationToken cancellationToken)
         {
-            this.JourneyContext.CancellationToken.ThrowIfCancellationRequested();
-
-            this.Response = await this.ExecuteStepRequestAsync((HttpStep)previous);
+            this.Response = await this.ExecuteStepRequestAsync((HttpStep)previous, cancellationToken);
 
             if (!this.JourneyContext.IgnoreBadResults)
             {
@@ -52,9 +51,9 @@
                 }
             }
 
-            this.Resource = await this.ResourceFormatter.FromResponseAsync(this.Response);
+            this.Resource = await this.ResourceFormatter.ReadAsResourceAsync(this.Response);
         }
 
-        internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous);
+        internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken);
     }
 }

@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     internal class SubmitStep : HttpStep
@@ -24,13 +25,13 @@
 
         //
 
-        internal override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous)
+        internal override Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken)
         {
             var senderControl = previous.Resource.GetControl(this.Rel);
             
-            var httpRequest = this.ResourceFormatter.ToRequest(new SendDictionary(this.SendModel), senderControl);
+            var httpRequest = this.ResourceFormatter.BuildRequest(new SendDictionary(this.SendModel), senderControl);
 
-            return this.HttpClient.SendAsync(httpRequest);
+            return this.HttpClient.SendAsync(httpRequest, cancellationToken);
         }
     }
 }

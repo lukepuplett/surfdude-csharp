@@ -3,6 +3,7 @@
     using Evoq.Surfdude.Hypertext;
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public abstract class JourneyBuilder : IJourneyStart, IJourneySteps
@@ -41,7 +42,7 @@
 
         //
 
-        async Task<JourneyReport> IJourneySteps.RunAsync(System.Threading.CancellationToken cancellationToken)
+        async Task<JourneyReport> IJourneySteps.RunAsync(CancellationToken cancellationToken)
         {            
             IStep previous = null;
             int stepCount = 1;
@@ -62,7 +63,7 @@
 
                 try
                 {
-                    await step.RunAsync(previous);
+                    await step.RunAsync(previous, cancellationToken);
                 }
                 catch (StepFailedException stepFailed)
                 {
@@ -83,32 +84,30 @@
 
         IJourneySteps IJourneySteps.Request(string rel)
         {
-            this.steps.Add(this.StepFactory.GetVisitStep(rel, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetRequestStep(rel, this.JourneyContext));
 
             return this;
         }
 
         IJourneySteps IJourneySteps.RequestItem(int index)
         {
-            this.steps.Add(this.StepFactory.GetVisitItemStep(index, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetRequestItemStep(index, this.JourneyContext));
 
             return this;
         }
 
         IJourneySteps IJourneySteps.Submit(string rel, object transferObject)
         {
-            this.steps.Add(this.StepFactory.GetSendStep(rel, transferObject, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetSubmitStep(rel, transferObject, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Read<TModel>(out TModel model)
+        IJourneySteps IJourneySteps.Read<TModel>(TModel[] models) 
         {
-            var step = this.StepFactory.GetReadIntoModelStep<TModel>(this.JourneyContext);
+            var step = this.StepFactory.GetReadStep<TModel>(this.JourneyContext, models);
 
             this.steps.Add(step);
-
-            model = step.Model;
 
             return this;
         }

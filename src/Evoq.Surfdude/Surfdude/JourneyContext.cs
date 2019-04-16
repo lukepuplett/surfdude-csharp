@@ -4,7 +4,7 @@
 
     public class JourneyContext
     {
-        public JourneyContext(string rootUri, CancellationToken cancellationToken = default)
+        public JourneyContext(string rootUri)
         {
             if (string.IsNullOrWhiteSpace(rootUri))
             {
@@ -12,7 +12,6 @@
             }
             
             this.RootUri = rootUri;
-            this.CancellationToken = cancellationToken;
         }
         
         //
@@ -20,7 +19,5 @@
         public string RootUri { get; }
 
         public bool IgnoreBadResults { get; set; } = false;
-
-        public CancellationToken CancellationToken { get; }
     }
 }
