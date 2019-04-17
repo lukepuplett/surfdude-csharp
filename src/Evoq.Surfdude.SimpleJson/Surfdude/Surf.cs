@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude
 {
     using System;
+    using System.Linq;
     using Evoq.Surfdude.Hypertext.SimpleJson;
 
     public sealed class Surf : SurfBuilder
@@ -18,7 +19,7 @@
                 throw new ArgumentNullOrWhitespaceException(nameof(rootUri));
             }
 
-            return Wave(new RideContext(rootUri));
+            return Wave(CreateContext(rootUri));
         }
 
         public static ISurfStart Wave(RideContext journeyContext)
@@ -29,6 +30,16 @@
             }
 
             return new Surf(journeyContext);
+        }
+
+        private static RideContext CreateContext(string rootUri)
+        {
+            int[] goodCodes = Enumerable.Range(200, 200).ToArray();
+
+            return new RideContext(rootUri)
+            {
+                ExpectedStatusCodes = goodCodes
+            };
         }
     }
 }

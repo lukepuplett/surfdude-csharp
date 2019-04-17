@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude
 {
     using Evoq.Surfdude.Hypertext;
+    using Evoq.Surfdude.Hypertext.Http;
     using System;
     using System.Collections.Generic;
     using System.Threading;
@@ -65,7 +66,7 @@
                 {
                     await step.ExecuteAsync(previous, cancellationToken);
                 }
-                catch (StepFailedException stepFailed)
+                catch (UnexpectedHttpResponseException stepFailed)
                 {
                     report.AppendException(stepFailed);
                     return report;

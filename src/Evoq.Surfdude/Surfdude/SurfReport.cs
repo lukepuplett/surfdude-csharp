@@ -1,5 +1,6 @@
 ﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext.Http;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -35,7 +36,7 @@
             this.reportLines.Add(new ReportLine(this.wallClock.Now(), "Stopped"));
         }
 
-        internal void AppendException(StepFailedException stepFailed)
+        internal void AppendException(UnexpectedHttpResponseException stepFailed)
         {
             this.reportLines.Add(new ReportLine(this.wallClock.Now(), stepFailed));
             this.HasException = true;

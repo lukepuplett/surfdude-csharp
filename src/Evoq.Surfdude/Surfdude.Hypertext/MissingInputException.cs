@@ -1,10 +1,11 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Evoq.Surfdude
+﻿namespace Evoq.Surfdude
 {
+    using Evoq.Surfdude.Hypertext;
+    using System;
+    using System.Runtime.Serialization;
+
     [Serializable]
-    public class MissingInputException : Exception
+    public class MissingInputException : HypertextException
     {
         public MissingInputException()
         {

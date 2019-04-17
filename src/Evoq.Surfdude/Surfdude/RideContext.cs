@@ -18,6 +18,6 @@
 
         public string RootUri { get; }
 
-        public bool IgnoreBadResults { get; set; } = false;
+        public int[] ExpectedStatusCodes { get; set; } = new int[0];
     }
 }

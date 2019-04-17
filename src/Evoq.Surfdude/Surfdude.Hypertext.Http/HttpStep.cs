@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -39,19 +40,28 @@
         {
             this.Response = await this.ExecuteStepRequestAsync((HttpStep)previous, cancellationToken);
 
-            if (!this.JourneyContext.IgnoreBadResults)
+            if (!this.IsExpectedStatus(this.Response.StatusCode))
             {
                 try
                 {
                     this.Response.EnsureSuccessStatusCode();
+
+                    throw new UnexpectedHttpResponseException(
+                        $"The HTTP request failed with status {(int)this.Response.StatusCode} {this.Response.StatusCode}.");
                 }
                 catch (HttpRequestException httpRequestException)
                 {
-                    throw new StepFailedException("The step failed. See inner exception.", httpRequestException);
+                    throw new UnexpectedHttpResponseException(
+                        $"The HTTP request failed with status {(int)this.Response.StatusCode} {this.Response.StatusCode}. See inner exception.", httpRequestException);
                 }
             }
 
             this.Resource = await this.ResourceFormatter.ReadAsResourceAsync(this.Response);
+        }
+
+        private bool IsExpectedStatus(HttpStatusCode statusCode)
+        {
+            return this.JourneyContext.ExpectedStatusCodes.Contains((int)statusCode);
         }
 
         internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken);

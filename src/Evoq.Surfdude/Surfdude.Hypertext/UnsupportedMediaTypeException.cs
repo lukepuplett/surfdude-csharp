@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Evoq.Surfdude.Hypertext
 {
     [Serializable]
-    public class UnsupportedMediaTypeException : Exception
+    public class UnsupportedMediaTypeException : HypertextException
     {
         public UnsupportedMediaTypeException()
         {

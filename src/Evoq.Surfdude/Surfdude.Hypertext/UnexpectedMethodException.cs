@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Evoq.Surfdude
+namespace Evoq.Surfdude.Hypertext
 {
     [Serializable]
-    public class UnexpectedMethodException : Exception
+    public class UnexpectedMethodException : HypertextException
     {
         public UnexpectedMethodException()
         {

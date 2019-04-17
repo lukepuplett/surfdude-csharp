@@ -4,11 +4,11 @@ namespace Evoq.Surfdude
 {
     public class ReportLine
     {
-        public ReportLine(DateTimeOffset time, StepFailedException stepFailed)
+        public ReportLine(DateTimeOffset time, Exception exception)
         {
             this.Time = time;
-            this.Message = stepFailed.Message;
-            this.Exception = stepFailed;
+            this.Message = exception.Message;
+            this.Exception = exception;
         }
 
         public ReportLine(DateTimeOffset time, string message)
