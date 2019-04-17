@@ -10,7 +10,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />  
+    <PackageReference Include="Flurl" Version="2.8.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="UriTemplate.Core" Version="1.0.2" />  
   </ItemGroup>
   
 </Project>

@@ -102,7 +102,28 @@
 
         private string PrepareUri(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
         {
-            throw new NotImplementedException(nameof(PrepareUri));
+            var pairs = new Dictionary<string, string>(sendPairs);
+
+            var uriTemplate = new UriTemplate.Core.UriTemplate(hypertextControl.HRef);
+            var uri = uriTemplate.BindByName(pairs);
+            var bindings = uriTemplate.Match(uri, pairs.Keys).Bindings;
+
+            foreach (var bound in bindings.Keys)
+            {
+                pairs.Remove(bound);
+            }
+
+            if (pairs.Count > 0)
+            {
+                var queryString = String.Join("&", pairs.Select(v => $"{v.Key}={v.Value}"));
+                var questionMark = uri.OriginalString.Contains("?") ? String.Empty : "?";
+
+                return Flurl.Url.Combine(uri.OriginalString, questionMark, queryString);
+            }
+            else
+            {
+                return uri.OriginalString;
+            }
         }
 
         private HttpContent PrepareHttpContent(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
