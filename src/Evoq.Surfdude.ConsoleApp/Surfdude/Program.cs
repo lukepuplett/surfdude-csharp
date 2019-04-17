@@ -9,6 +9,13 @@
         static async Task Main(string[] args)
         {
             SurfReport report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
+                   .FromRoot()
+                   .Submit("registration-finder", new { status = "active", email = "mike@beans.com" })                   
+                   .RideItAsync();
+
+            return;
+
+            report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                 .FromRoot()
                 .To("registrations")
                 .ToItem(0)

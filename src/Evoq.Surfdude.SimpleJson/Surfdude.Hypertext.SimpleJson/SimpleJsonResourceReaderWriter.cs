@@ -167,15 +167,15 @@
 
             if (sendKeys.Any())
             {
-                message = $"Unable to prepare the representation to send. The control associated with " +
-                    $"relation '{hypertextControl.Rel}' defines the input(s) '{String.Join(", ", missing)}'" +
-                    $" not found in the data being sent, '{String.Join(", ", sendKeys)}'.";
+                message =
+                    $"Unable to prepare a request for the relation '{hypertextControl.Rel}'. These inputs were " +
+                    $"supplied, '{String.Join(", ", sendKeys)}'. One or more of these inputs were missing, '{String.Join(", ", missing)}'.";
             }
             else
             {
-                message = $"Unable to prepare the representation to send. The control associated with " +
-                    $"relation '{hypertextControl.Rel}' defines the input(s) '{String.Join(", ", missing)}'" +
-                    $" but there is no data being sent.";
+                message =
+                    $"Unable to prepare a request for the relation '{hypertextControl.Rel}'. No inputs were " +
+                    $"supplied. The control has these inputs, '{String.Join(", ", missing)}'.";
             }
 
             var missingInputException = new MissingInputException(message);
