@@ -39,8 +39,7 @@ Notice how the protocol methods and resource identifiers are completely absent, 
 
 As Roy Fielding explained, most of the effort in designing a REST API should go into designing the media-type.
 
-The JSON, HTML or XML of your API should contain hypermedia controls that contain all the information needed for the client
-to make use of those controls. For HTML the `<a>` and `<form>` tags come with clear processing instructions for web browser
+The JSON, HTML, XML or YAML or whatever of your API should contain hypermedia controls that contain all the information needed for the client to make use of those controls. For HTML the `<a>` and `<form>` tags come with clear processing instructions for web browser
 clients to make use of these controls whenever they are encountered.
 
 The upshot of this uniformity is that a nice website needs no further documentation; if the browser cannot work with the
