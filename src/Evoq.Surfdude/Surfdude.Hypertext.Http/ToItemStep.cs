@@ -1,19 +1,18 @@
-﻿using Evoq.Surfdude.Hypertext;
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Evoq.Surfdude.Hypertext.Http
+﻿namespace Evoq.Surfdude.Hypertext.Http
 {
-    internal class RequestItemStep : HttpStep
+    using Evoq.Surfdude.Hypertext;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    internal class ToItemStep : HttpStep
     {
         private const string ItemRelation = "item";
 
         //
 
-        public RequestItemStep(int index, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public ToItemStep(int index, HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
             : base(httpClient, journeyContext, resourceFormatter)
         {
             this.Index = index;

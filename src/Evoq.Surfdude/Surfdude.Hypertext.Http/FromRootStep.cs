@@ -8,7 +8,7 @@ namespace Evoq.Surfdude.Hypertext.Http
 {
     internal class FromRootStep : HttpStep
     {
-        public FromRootStep(HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public FromRootStep(HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
             : base(httpClient, journeyContext, resourceFormatter)
         {
         }

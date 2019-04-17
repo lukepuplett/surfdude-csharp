@@ -10,7 +10,7 @@
 
     internal class SubmitStep : HttpStep
     {
-        public SubmitStep(string rel, object sendModel, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public SubmitStep(string rel, object sendModel, HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
             : base(httpClient, journeyContext, resourceFormatter)
         {
             this.Rel = rel ?? throw new ArgumentNullException(nameof(rel));

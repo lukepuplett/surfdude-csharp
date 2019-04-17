@@ -9,7 +9,7 @@
     {
         private readonly TModel[] models;
 
-        public ReadStep(TModel[] models, HttpClient httpClient, JourneyContext context, IHypertextResourceFormatter resourceFormatter)
+        public ReadStep(TModel[] models, HttpClient httpClient, RideContext context, IHypertextResourceFormatter resourceFormatter)
             : base(httpClient, context, resourceFormatter)
         {
             this.models = models ?? throw new System.ArgumentNullException(nameof(models));

@@ -6,20 +6,20 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public abstract class JourneyBuilder : IJourneyStart, IJourneySteps
+    public abstract class SurfBuilder : ISurfStart, ISurfSteps
     {
         private readonly List<IStep> steps = new List<IStep>(20);
 
         //
-        public JourneyBuilder() { }
+        public SurfBuilder() { }
 
-        protected JourneyBuilder(JourneyContext context, IHypertextResourceFormatter resourceFormatter)
+        protected SurfBuilder(RideContext context, IHypertextResourceFormatter resourceFormatter)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
             this.StepFactory = new StepFactory(context, resourceFormatter);
         }
 
-        protected JourneyBuilder(JourneyContext context, StepFactory stepFactory)
+        protected SurfBuilder(RideContext context, StepFactory stepFactory)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
             this.StepFactory = stepFactory ?? throw new ArgumentNullException(nameof(stepFactory));
@@ -27,13 +27,13 @@
 
         //
 
-        protected JourneyContext JourneyContext { get; }
+        protected RideContext JourneyContext { get; }
 
         protected StepFactory StepFactory { get; }
 
         //
 
-        public IJourneySteps FromRoot()
+        public ISurfSteps FromRoot()
         {
             this.steps.Add(this.StepFactory.GetFromRootStep(this.JourneyContext));
 
@@ -42,12 +42,12 @@
 
         //
 
-        async Task<JourneyReport> IJourneySteps.RunAsync(CancellationToken cancellationToken)
+        async Task<SurfReport> ISurfSteps.GoAsync(CancellationToken cancellationToken)
         {            
             IStep previous = null;
             int stepCount = 1;
 
-            var report = new JourneyReport();
+            var report = new SurfReport();
             
             report.AppendStarted();
 
@@ -63,7 +63,7 @@
 
                 try
                 {
-                    await step.RunAsync(previous, cancellationToken);
+                    await step.ExecuteAsync(previous, cancellationToken);
                 }
                 catch (StepFailedException stepFailed)
                 {
@@ -82,28 +82,28 @@
             return report;
         }
 
-        IJourneySteps IJourneySteps.Request(string rel)
+        ISurfSteps ISurfSteps.To(string rel)
         {
-            this.steps.Add(this.StepFactory.GetRequestStep(rel, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetToStep(rel, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.RequestItem(int index)
+        ISurfSteps ISurfSteps.ToItem(int index)
         {
-            this.steps.Add(this.StepFactory.GetRequestItemStep(index, this.JourneyContext));
+            this.steps.Add(this.StepFactory.GetToItemStep(index, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Submit(string rel, object transferObject)
+        ISurfSteps ISurfSteps.Submit(string rel, object transferObject)
         {
             this.steps.Add(this.StepFactory.GetSubmitStep(rel, transferObject, this.JourneyContext));
 
             return this;
         }
 
-        IJourneySteps IJourneySteps.Read<TModel>(TModel[] models) 
+        ISurfSteps ISurfSteps.Read<TModel>(TModel[] models) 
         {
             var step = this.StepFactory.GetReadStep<TModel>(this.JourneyContext, models);
 

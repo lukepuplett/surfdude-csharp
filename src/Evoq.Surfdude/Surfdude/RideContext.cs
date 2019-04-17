@@ -2,9 +2,9 @@
 {
     using System.Threading;
 
-    public class JourneyContext
+    public class RideContext
     {
-        public JourneyContext(string rootUri)
+        public RideContext(string rootUri)
         {
             if (string.IsNullOrWhiteSpace(rootUri))
             {

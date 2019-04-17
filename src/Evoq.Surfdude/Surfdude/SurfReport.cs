@@ -4,18 +4,18 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class JourneyReport
+    public class SurfReport
     {
         private readonly IWallClock wallClock;
-        private readonly List<JourneyReportLine> reportLines = new List<JourneyReportLine>(20);
+        private readonly List<ReportLine> reportLines = new List<ReportLine>(20);
 
         //
 
-        public JourneyReport()
+        public SurfReport()
             : this(new WallClock(() => DateTime.Now))
         { }
 
-        public JourneyReport(IWallClock wallClock)
+        public SurfReport(IWallClock wallClock)
         {
             this.wallClock = wallClock ?? throw new ArgumentNullException(nameof(wallClock));
         }
@@ -24,7 +24,7 @@
 
         public bool HasException { get; private set; }
 
-        public IEnumerable<JourneyReportLine> Lines => this.reportLines.ToArray();
+        public IEnumerable<ReportLine> Lines => this.reportLines.ToArray();
 
         private Exception FirstException => this.reportLines.FirstOrDefault(line => line.Exception != null).Exception;
 
@@ -32,23 +32,23 @@
 
         internal void AppendStopped()
         {
-            this.reportLines.Add(new JourneyReportLine(this.wallClock.Now(), "Stopped"));
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), "Stopped"));
         }
 
         internal void AppendException(StepFailedException stepFailed)
         {
-            this.reportLines.Add(new JourneyReportLine(this.wallClock.Now(), stepFailed));
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), stepFailed));
             this.HasException = true;
         }
 
         internal void AppendCancelled()
         {
-            this.reportLines.Add(new JourneyReportLine(this.wallClock.Now(), "Cancelled"));
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), "Cancelled"));
         }
 
         internal void AppendStarted()
         {
-            this.reportLines.Add(new JourneyReportLine(this.wallClock.Now(), "Started"));
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), "Started"));
         }
 
         internal void AppendResourceAction(string verb, string relation, string resourceId)
@@ -70,12 +70,12 @@
 
             string message = $"{verb.ToUpper()} {relation}: {resourceId}";
 
-            this.reportLines.Add(new JourneyReportLine(this.wallClock.Now(), message));
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), message));
         }
 
         internal void AppendStep(string name)
         {
-            this.reportLines.Add(new JourneyReportLine(this.wallClock.Now(), $"Running step '{name}'."));
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), $"Running step '{name}'."));
         }
 
         public void EnsureSuccess()

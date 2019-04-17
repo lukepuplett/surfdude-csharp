@@ -7,7 +7,7 @@
 
     public class StepFactory // Refactor into IServiceProvider.Get<FromRootStep>()
     {
-        public StepFactory(JourneyContext context, IHypertextResourceFormatter resourceFormatter)
+        public StepFactory(RideContext context, IHypertextResourceFormatter resourceFormatter)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
             this.ResourceFormatter = resourceFormatter ?? throw new ArgumentNullException(nameof(resourceFormatter));
@@ -15,33 +15,33 @@
 
         //
 
-        public JourneyContext JourneyContext { get; }
+        public RideContext JourneyContext { get; }
 
         private IHypertextResourceFormatter ResourceFormatter { get; }
 
         //
 
-        protected internal virtual IStep GetFromRootStep(JourneyContext context)
+        protected internal virtual IStep GetFromRootStep(RideContext context)
         {
             return new FromRootStep(this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetRequestStep(string rel, JourneyContext context)
+        protected internal virtual IStep GetToStep(string rel, RideContext context)
         {
-            return new RequestStep(rel, this.GetHttpClient(), context, this.ResourceFormatter);
+            return new ToStep(rel, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetRequestItemStep(int index, JourneyContext context)
+        protected internal virtual IStep GetToItemStep(int index, RideContext context)
         {
-            return new RequestItemStep(index, this.GetHttpClient(), context, this.ResourceFormatter);
+            return new ToItemStep(index, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        protected internal virtual IStep GetSubmitStep(string rel, object transferObject, JourneyContext context)
+        protected internal virtual IStep GetSubmitStep(string rel, object transferObject, RideContext context)
         {
             return new SubmitStep(rel, transferObject, this.GetHttpClient(), context, this.ResourceFormatter);
         }
 
-        internal ReadStep<TModel> GetReadStep<TModel>(JourneyContext context, TModel[] models) where TModel : class
+        internal ReadStep<TModel> GetReadStep<TModel>(RideContext context, TModel[] models) where TModel : class
         {
             return new ReadStep<TModel>(models, this.GetHttpClient(), context, this.ResourceFormatter);
         }

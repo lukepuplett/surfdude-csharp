@@ -8,15 +8,15 @@
     {
         static async Task Main(string[] args)
         {
-            var report = await Journey.Start(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
+            var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                 .FromRoot()
-                .Request("registrations")
-                .RequestItem(0)
+                .To("registrations")
+                .ToItem(0)
                 .Submit("update-contact-details", new { email = "mike@beans.com" })
                 .Read(out Func<ResourceModel> getContactDetails)
-                .Request("registration")
+                .To("registration")
                 .Submit("add-processing-instruction", new { message = "Put NO-SPAM in the email subject." })
-                .RunAsync();
+                .GoAsync();
 
             Console.WriteLine(getContactDetails().Email);
 

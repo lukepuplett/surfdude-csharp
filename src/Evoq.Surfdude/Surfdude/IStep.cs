@@ -10,6 +10,6 @@
 
         IHypertextResource Resource { get; }
 
-        Task RunAsync(IStep previous, CancellationToken cancellationToken);
+        Task ExecuteAsync(IStep previous, CancellationToken cancellationToken);
     }
 }

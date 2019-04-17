@@ -1,14 +1,13 @@
 ﻿namespace Evoq.Surfdude.Hypertext.Http
 {
     using Evoq.Surfdude.Hypertext;
-    using System;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class RequestStep : HttpStep
+    internal class ToStep : HttpStep
     {
-        public RequestStep(string rel, HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public ToStep(string rel, HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
             : base(httpClient, journeyContext, resourceFormatter)
         {
             if (string.IsNullOrWhiteSpace(rel))

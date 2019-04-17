@@ -3,32 +3,32 @@
     using System;
     using Evoq.Surfdude.Hypertext.SimpleJson;
 
-    public sealed class Journey : JourneyBuilder
+    public sealed class Surf : SurfBuilder
     {
-        public Journey(JourneyContext journeyContext)
+        public Surf(RideContext journeyContext)
             : base(journeyContext, new SimpleJsonResourceReaderWriter(journeyContext))
         {
 
         }
 
-        public static IJourneyStart Start(string rootUri)
+        public static ISurfStart Wave(string rootUri)
         {
             if (string.IsNullOrWhiteSpace(rootUri))
             {
                 throw new ArgumentNullOrWhitespaceException(nameof(rootUri));
             }
 
-            return Start(new JourneyContext(rootUri));
+            return Wave(new RideContext(rootUri));
         }
 
-        public static IJourneyStart Start(JourneyContext journeyContext)
+        public static ISurfStart Wave(RideContext journeyContext)
         {
             if (journeyContext == null)
             {
                 throw new ArgumentNullException(nameof(journeyContext));
             }
 
-            return new Journey(journeyContext);
+            return new Surf(journeyContext);
         }
     }
 }

@@ -11,14 +11,14 @@
 
     internal class SimpleJsonResourceReaderWriter : IHypertextResourceFormatter
     {
-        public SimpleJsonResourceReaderWriter(JourneyContext context)
+        public SimpleJsonResourceReaderWriter(RideContext context)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         //
 
-        public JourneyContext JourneyContext { get; }
+        public RideContext JourneyContext { get; }
 
         public string DefaultMediaType { get; } = "application/simple-hypertext+json";
 

@@ -2,16 +2,16 @@
 
 namespace Evoq.Surfdude
 {
-    public class JourneyReportLine
+    public class ReportLine
     {
-        public JourneyReportLine(DateTimeOffset time, StepFailedException stepFailed)
+        public ReportLine(DateTimeOffset time, StepFailedException stepFailed)
         {
             this.Time = time;
             this.Message = stepFailed.Message;
             this.Exception = stepFailed;
         }
 
-        public JourneyReportLine(DateTimeOffset time, string message)
+        public ReportLine(DateTimeOffset time, string message)
         {
             this.Time = time;
             this.Message = message ?? throw new ArgumentNullException(nameof(message));

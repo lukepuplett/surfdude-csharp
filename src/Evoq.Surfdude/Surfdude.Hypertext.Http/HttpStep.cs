@@ -10,7 +10,7 @@
 
     public abstract class HttpStep : IStep
     {
-        public HttpStep(HttpClient httpClient, JourneyContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public HttpStep(HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
         {
             this.HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.JourneyContext = journeyContext ?? throw new ArgumentNullException(nameof(journeyContext));
@@ -29,13 +29,13 @@
 
         protected IHypertextResourceFormatter ResourceFormatter { get; }
 
-        protected JourneyContext JourneyContext { get; }
+        protected RideContext JourneyContext { get; }
 
         protected HttpClient HttpClient { get; }
 
         //
 
-        public async Task RunAsync(IStep previous, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(IStep previous, CancellationToken cancellationToken)
         {
             this.Response = await this.ExecuteStepRequestAsync((HttpStep)previous, cancellationToken);
 

@@ -23,15 +23,15 @@ Surfdude makes this kind of code possible. Notice how the protocol methods and r
 reinforcing the notion that URLs cannot themselves be RESTful; a machine cares not for pluralised nouns and semantic
 structure.
 
-	var report = await Journey.Start("https://private-ac89c-surfdude.apiary-mock.com/")
+	var report = await Surf.Wave("https://private-ac89c-surfdude.apiary-mock.com/")
 		.FromRoot()
-		.Request("registrations")
-		.RequestItem(0)
+		.To("registrations")
+		.ToItem(0)
 		.Submit("update-contact-details", new { email = "mike@beans.com" })
 		.Read(out Func<ResourceModel> getContactDetails)
-		.Request("registration")
+		.To("registration")
 		.Submit("add-processing-instruction", new { message = "The applicant is partially sighted." })
-		.RunAsync();
+		.GoAsync();
 
 	Console.WriteLine(getContactDetails().Email);
 
@@ -51,6 +51,6 @@ Surfude lets you replace the classes that read and process your hypertext resour
 ## Evolving APIs
 
 Websites change over time and yet customers rarely notice. Their experience remains uninterrupted, the links keep working
-and adding an item to a shopping cart continues to work, if though the underlying resources are changing all day.
+and adding an item to a shopping cart continues to work, if though the underlying resources may be changing each day.
 
 A great API using a dynamic client affords the same flexibility since interactions are loosely based on relation names.
