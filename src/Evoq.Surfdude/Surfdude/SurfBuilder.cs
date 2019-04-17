@@ -42,7 +42,7 @@
 
         //
 
-        async Task<SurfReport> ISurfSteps.GoAsync(CancellationToken cancellationToken)
+        async Task<SurfReport> ISurfSteps.RideItAsync(CancellationToken cancellationToken)
         {            
             IStep previous = null;
             int stepCount = 1;

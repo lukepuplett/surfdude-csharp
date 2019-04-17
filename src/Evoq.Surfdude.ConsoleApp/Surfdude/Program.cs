@@ -8,7 +8,7 @@
     {
         static async Task Main(string[] args)
         {
-            var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
+            SurfReport report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                 .FromRoot()
                 .To("registrations")
                 .ToItem(0)
@@ -16,7 +16,7 @@
                 .Read(out Func<ResourceModel> getContactDetails)
                 .To("registration")
                 .Submit("add-processing-instruction", new { message = "Put NO-SPAM in the email subject." })
-                .GoAsync();
+                .RideItAsync();
 
             Console.WriteLine(getContactDetails().Email);
 

@@ -12,6 +12,6 @@
 
         ISurfSteps Read<TModel>(TModel[] models) where TModel : class;
 
-        Task<SurfReport> GoAsync(System.Threading.CancellationToken cancellationToken = default);
+        Task<SurfReport> RideItAsync(System.Threading.CancellationToken cancellationToken = default);
     }
 }
