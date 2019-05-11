@@ -1,4 +1,4 @@
-﻿namespace Evoq.Surfdude.Hypertext
+﻿namespace Evoq.Surfdude.Hypertext.Http
 {
     using System.Collections.Generic;
     using System.Net.Http;

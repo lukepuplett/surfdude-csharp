@@ -62,26 +62,50 @@
                 this.CheckInputs(sendPairs, hypertextControl);
             }
 
-            HttpRequestMessage httpRequest;
-            if (hypertextControl.IsMutation())
+            var httpRequest = this.CreateRequestWithOptionalBody(sendPairs, hypertextControl);
+
+            this.AppendHeaders(hypertextControl, httpRequest);
+
+            return httpRequest;
+        }
+
+        //
+
+        private void AppendHeaders(IHypertextControl hypertextControl, HttpRequestMessage httpRequest)
+        {
+            if (this.DefaultMediaType != null)
             {
-                httpRequest = new HttpRequestMessage(hypertextControl.GetHttpMethod(), hypertextControl.HRef)
+                httpRequest.Headers.Accept.ParseAdd(this.DefaultMediaType);
+            }
+
+            if (this.DefaultCharSet != null)
+            {
+                httpRequest.Headers.AcceptCharset.ParseAdd(this.DefaultCharSet);
+            }
+
+            if (hypertextControl.TryParseIfMatch(out string ifMatch))
+            {
+                httpRequest.Headers.IfMatch.ParseAdd(ifMatch);
+            }
+        }
+
+        private HttpRequestMessage CreateRequestWithOptionalBody(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
+        {
+            HttpRequestMessage httpRequest;
+            if (hypertextControl.SupportsRequestBody())
+            {
+                httpRequest = new HttpRequestMessage(hypertextControl.DetermineHttpMethod(), hypertextControl.HRef)
                 {
                     Content = this.PrepareHttpContent(sendPairs, hypertextControl)
                 };
             }
             else
             {
-                httpRequest = new HttpRequestMessage(hypertextControl.GetHttpMethod(), this.PrepareUri(sendPairs, hypertextControl));
+                httpRequest = new HttpRequestMessage(hypertextControl.DetermineHttpMethod(), this.PrepareUri(sendPairs, hypertextControl));
             }
-
-            httpRequest.Headers.Accept.ParseAdd(this.DefaultMediaType);
-            httpRequest.Headers.AcceptCharset.ParseAdd(this.DefaultCharSet);
 
             return httpRequest;
         }
-
-        //
 
         private async Task<T> Deserialize<T>(HttpResponseMessage httpResponse)
         {
@@ -108,15 +132,15 @@
             var uri = uriTemplate.BindByName(pairs);
             var bindings = uriTemplate.Match(uri, pairs.Keys).Bindings;
 
-            foreach (var bound in bindings.Keys)
+            foreach (string bound in bindings.Keys)
             {
                 pairs.Remove(bound);
             }
 
             if (pairs.Count > 0)
             {
-                var queryString = String.Join("&", pairs.Select(v => $"{v.Key}={v.Value}"));
-                var questionMark = uri.OriginalString.Contains("?") ? String.Empty : "?";
+                string queryString = String.Join("&", pairs.Select(v => $"{v.Key}={v.Value}"));
+                string questionMark = uri.OriginalString.Contains("?") ? String.Empty : "?";
 
                 return Flurl.Url.Combine(uri.OriginalString, questionMark, queryString);
             }

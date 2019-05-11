@@ -8,27 +8,27 @@
     {
         static async Task Main(string[] args)
         {
-            var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
-                   .FromRoot()
-                   .ThenSubmit("registration-finder", new { status = "active", email = "mike@beans.com" })
-                   .GoAsync();
-
             //var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
-            //    .FromRoot()
-            //    .To("registrations")
-            //    .ToItem(0)
-            //    .Submit("update-contact-details", new { email = "mike@beans.com" })
-            //    .Read(out Func<ResourceModel> getContactDetails)
-            //    .To("registration")
-            //    .Submit("add-processing-instruction", new { message = "Put NO-SPAM in the email subject." })
-            //    .RideItAsync();
+            //       .FromRoot()
+            //       .ThenSubmit("registration-finder", new { status = "active", email = "mike@beans.com" })
+            //       .GoAsync();
 
-            //Console.WriteLine(getContactDetails().Email);
+            var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
+                .FromRoot()
+                .Then("registrations")
+                .ThenItem(0)
+                .ThenSubmit("update-contact-details", new { email = "mike@beans.com" })
+                .ThenRead(out Func<ResourceModel> getContactDetails)
+                .Then("registration")
+                .ThenSubmit("add-processing-instruction", new { message = "Put NO-SPAM in the email subject." })
+                .GoAsync();
 
-            //foreach (var line in report.Lines)
-            //{
-            //    Console.WriteLine(line.Message);
-            //}
+            Console.WriteLine(getContactDetails().Email);
+
+            foreach (var line in report.Lines)
+            {
+                Console.WriteLine(line.Message);
+            }
 
             report.EnsureSuccess();
         }

@@ -2,7 +2,7 @@
 {
     public static class HttpControlData
     {
-        public static readonly string MethodControlName = "method";
-        public static readonly string IfMatchControlName = "if-match";
+        public static string MethodControlName { get; } = "method";
+        public static string IfMatchControlName { get; } = "if-match";
     }
 }

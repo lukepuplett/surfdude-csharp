@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Evoq.Surfdude.Hypertext
+﻿namespace Evoq.Surfdude.Hypertext
 {
+    using System;
+    using System.Runtime.Serialization;
+
     [Serializable]
     public class UnexpectedMethodException : HypertextException
     {

@@ -28,7 +28,7 @@
         {
             var itemControl = previous.Resource.GetItem(this.Index).GetControl(ItemRelation);
 
-            if (itemControl.IsMutation())
+            if (itemControl.SupportsRequestBody())
             {
                 throw new UnexpectedInputsException(
                     $"Unable to invoke the HTTP request to get the item. The item's '{ItemRelation}' hypertext control" +
