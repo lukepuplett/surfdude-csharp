@@ -1,6 +1,7 @@
 ﻿namespace Evoq.Surfdude.Hypertext.SimpleJson
 {
     using Evoq.Surfdude.Hypertext.Http;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -11,9 +12,15 @@
 
     internal class SimpleJsonResourceReaderWriter : IHypertextResourceFormatter
     {
+        private readonly ILogger logger;
+
+        //
+
         public SimpleJsonResourceReaderWriter(SurfContext context)
         {
             this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
+
+            logger = this.JourneyContext.LoggerFactory?.CreateLogger<IHypertextResourceFormatter>();
         }
 
         //
@@ -75,22 +82,30 @@
         {
             if (this.DefaultMediaType != null)
             {
+                logger?.LogDebug($"Append header Accept: {this.DefaultMediaType}");
+
                 httpRequest.Headers.Accept.ParseAdd(this.DefaultMediaType);
             }
 
             if (this.DefaultCharSet != null)
             {
+                logger?.LogDebug($"Append header Accept: {this.DefaultCharSet}");
+
                 httpRequest.Headers.AcceptCharset.ParseAdd(this.DefaultCharSet);
             }
 
             if (hypertextControl.TryParseIfMatch(out string ifMatch))
             {
+                logger?.LogDebug($"Append header Accept: {ifMatch}");
+
                 httpRequest.Headers.IfMatch.ParseAdd(ifMatch);
             }
         }
 
         private HttpRequestMessage CreateRequestWithOptionalBody(IDictionary<string, string> sendPairs, IHypertextControl hypertextControl)
         {
+            logger?.LogDebug("Creating HTTP request.");
+
             HttpRequestMessage httpRequest;
             if (hypertextControl.SupportsRequestBody())
             {
@@ -179,8 +194,10 @@
                 jsonBodyString = Newtonsoft.Json.JsonConvert.SerializeObject(sendPairs);
             }
 
-            var httpContent = new StringContent(jsonBodyString);
+            logger?.LogDebug($"HTTP request body has {jsonBodyString.Length} chars.");
 
+            var httpContent = new StringContent(jsonBodyString);
+            
             httpContent.Headers.ContentType.MediaType = this.DefaultMediaType;
             httpContent.Headers.ContentType.CharSet = this.DefaultCharSet;
 

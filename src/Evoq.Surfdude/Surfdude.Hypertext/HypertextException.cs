@@ -1,7 +1,7 @@
 ﻿namespace Evoq.Surfdude.Hypertext
 {
     [System.Serializable]
-    public abstract class HypertextException : SurfException
+    public abstract class HypertextException : FailedSurfException
     {
         public HypertextException() { }
 

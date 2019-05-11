@@ -2,7 +2,7 @@
 
 namespace Evoq.Surfdude.Hypertext.Http
 {
-    public class UnexpectedHttpResponseException : SurfException
+    public class UnexpectedHttpResponseException : FailedSurfException
     {
         public UnexpectedHttpResponseException()
         {

@@ -71,9 +71,15 @@
                 {
                     await step.ExecuteAsync(previous, cancellationToken);
                 }
-                catch (UnexpectedHttpResponseException stepFailed)
+                catch (FailedSurfException failedSurf)
                 {
-                    report.AppendException(stepFailed);
+                    report.AppendException(failedSurf);
+
+                    if (this.SurfContext.ThrowOnError)
+                    {
+                        throw;
+                    }
+
                     return report;
                 }
                 finally

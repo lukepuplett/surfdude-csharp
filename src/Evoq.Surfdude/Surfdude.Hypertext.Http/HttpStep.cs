@@ -55,7 +55,7 @@
 
         private bool IsExpectedStatus(HttpStatusCode statusCode)
         {
-            return this.StepContext.SurfContext.ExpectedStatusCodes.Contains((int)statusCode);
+            return this.StepContext.SurfContext.ExpectedStatusCodes?.Contains((int)statusCode) ?? false;
         }
 
         internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken);

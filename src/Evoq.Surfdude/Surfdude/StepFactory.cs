@@ -44,7 +44,7 @@
 
         internal ReadStep<TModel> GetReadStep<TModel>(SurfContext context, TModel[] models) where TModel : class
         {
-            return new ReadStep<TModel>(this.CreateStepContext(context), models );
+            return new ReadStep<TModel>(this.CreateStepContext(context), models);
         }
 
         private HttpClient GetHttpClient()

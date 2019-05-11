@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Evoq.Instrumentation" Version="1.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Evoq.Surfdude.SimpleJson\Evoq.Surfdude.SimpleJson.csproj" />
     <ProjectReference Include="..\Evoq.Surfdude\Evoq.Surfdude.csproj" />
   </ItemGroup>

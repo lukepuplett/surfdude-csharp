@@ -36,9 +36,14 @@
             this.reportLines.Add(new ReportLine(this.wallClock.Now(), "Stopped"));
         }
 
-        internal void AppendException(UnexpectedHttpResponseException stepFailed)
+        internal void AppendException(Exception exception)
         {
-            this.reportLines.Add(new ReportLine(this.wallClock.Now(), stepFailed));
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(exception));
+            }
+
+            this.reportLines.Add(new ReportLine(this.wallClock.Now(), exception));
             this.HasException = true;
         }
 
