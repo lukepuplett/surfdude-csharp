@@ -9,8 +9,8 @@
     {
         private readonly TModel[] models;
 
-        public ReadStep(TModel[] models, HttpClient httpClient, RideContext context, IHypertextResourceFormatter resourceFormatter)
-            : base(httpClient, context, resourceFormatter)
+        public ReadStep(HttpStepContext stepContext, TModel[] models)
+            : base(stepContext)
         {
             this.models = models ?? throw new System.ArgumentNullException(nameof(models));
         }
@@ -19,7 +19,7 @@
 
         internal override async Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken)
         {
-            var m = await this.ResourceFormatter.ReadAsModelAsync<TModel>(previous.Response);
+            var m = await this.StepContext.ResourceFormatter.ReadAsModelAsync<TModel>(previous.Response);
 
             models[0] = m;
 

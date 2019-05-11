@@ -11,11 +11,9 @@
 
     public abstract class HttpStep : IStep
     {
-        public HttpStep(HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
+        public HttpStep(HttpStepContext stepContext)
         {
-            this.HttpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            this.JourneyContext = journeyContext ?? throw new ArgumentNullException(nameof(journeyContext));
-            this.ResourceFormatter = resourceFormatter ?? throw new ArgumentNullException(nameof(resourceFormatter));
+            this.StepContext = stepContext ?? throw new ArgumentNullException(nameof(stepContext));
         }
 
         //
@@ -26,13 +24,9 @@
 
         //
 
+        public HttpStepContext StepContext { get; }
+
         protected internal HttpResponseMessage Response { get; set; }
-
-        protected IHypertextResourceFormatter ResourceFormatter { get; }
-
-        protected RideContext JourneyContext { get; }
-
-        protected HttpClient HttpClient { get; }
 
         //
 
@@ -56,12 +50,12 @@
                 }
             }
 
-            this.Resource = await this.ResourceFormatter.ReadAsResourceAsync(this.Response);
+            this.Resource = await this.StepContext.ResourceFormatter.ReadAsResourceAsync(this.Response);
         }
 
         private bool IsExpectedStatus(HttpStatusCode statusCode)
         {
-            return this.JourneyContext.ExpectedStatusCodes.Contains((int)statusCode);
+            return this.StepContext.SurfContext.ExpectedStatusCodes.Contains((int)statusCode);
         }
 
         internal abstract Task<HttpResponseMessage> ExecuteStepRequestAsync(HttpStep previous, CancellationToken cancellationToken);

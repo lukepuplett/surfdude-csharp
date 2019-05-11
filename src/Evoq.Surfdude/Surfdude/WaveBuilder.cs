@@ -7,49 +7,54 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public abstract class SurfBuilder : ISurfStart, ISurfSteps
+    public abstract class WaveBuilder : IWaveStart, IWaveSteps
     {
         private readonly List<IStep> steps = new List<IStep>(20);
 
         //
-        public SurfBuilder() { }
+        public WaveBuilder() { }
 
-        protected SurfBuilder(RideContext context, IHypertextResourceFormatter resourceFormatter)
+        protected WaveBuilder(SurfContext context, IHypertextResourceFormatter resourceFormatter)
         {
-            this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
+            this.SurfContext = context ?? throw new ArgumentNullException(nameof(context));
             this.StepFactory = new StepFactory(context, resourceFormatter);
         }
 
-        protected SurfBuilder(RideContext context, StepFactory stepFactory)
+        protected WaveBuilder(SurfContext context, StepFactory stepFactory)
         {
-            this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
+            this.SurfContext = context ?? throw new ArgumentNullException(nameof(context));
             this.StepFactory = stepFactory ?? throw new ArgumentNullException(nameof(stepFactory));
         }
 
         //
 
-        protected RideContext JourneyContext { get; }
+        protected SurfContext SurfContext { get; }
 
         protected StepFactory StepFactory { get; }
 
         //
 
-        public ISurfSteps FromRoot()
+        public IWaveSteps FromRoot()
         {
-            this.steps.Add(this.StepFactory.GetFromRootStep(this.JourneyContext));
+            return this.From(this.SurfContext.RootUri);
+        }
+
+        public IWaveSteps From(string uri)
+        {
+            steps.Add(this.StepFactory.GetFromStep(uri, this.SurfContext));
 
             return this;
         }
 
         //
 
-        async Task<SurfReport> ISurfSteps.RideItAsync(CancellationToken cancellationToken)
-        {            
+        async Task<SurfReport> IWaveSteps.GoAsync(CancellationToken cancellationToken)
+        {
             IStep previous = null;
             int stepCount = 1;
 
             var report = new SurfReport();
-            
+
             report.AppendStarted();
 
             foreach (var step in steps)
@@ -83,32 +88,32 @@
             return report;
         }
 
-        ISurfSteps ISurfSteps.To(string rel)
+        IWaveSteps IWaveSteps.Then(string rel)
         {
-            this.steps.Add(this.StepFactory.GetToStep(rel, this.JourneyContext));
+            steps.Add(this.StepFactory.GetToStep(rel, this.SurfContext));
 
             return this;
         }
 
-        ISurfSteps ISurfSteps.ToItem(int index)
+        IWaveSteps IWaveSteps.ThenItem(int index)
         {
-            this.steps.Add(this.StepFactory.GetToItemStep(index, this.JourneyContext));
+            steps.Add(this.StepFactory.GetToItemStep(index, this.SurfContext));
 
             return this;
         }
 
-        ISurfSteps ISurfSteps.Submit(string rel, object transferObject)
+        IWaveSteps IWaveSteps.ThenSubmit(string rel, object transferObject)
         {
-            this.steps.Add(this.StepFactory.GetSubmitStep(rel, transferObject, this.JourneyContext));
+            steps.Add(this.StepFactory.GetSubmitStep(rel, transferObject, this.SurfContext));
 
             return this;
         }
 
-        ISurfSteps ISurfSteps.Read<TModel>(TModel[] models) 
+        IWaveSteps IWaveSteps.ThenRead<TModel>(TModel[] models)
         {
-            var step = this.StepFactory.GetReadStep<TModel>(this.JourneyContext, models);
+            var step = this.StepFactory.GetReadStep<TModel>(this.SurfContext, models);
 
-            this.steps.Add(step);
+            steps.Add(step);
 
             return this;
         }

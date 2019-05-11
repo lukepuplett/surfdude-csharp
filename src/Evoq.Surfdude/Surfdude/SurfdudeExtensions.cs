@@ -6,18 +6,18 @@ namespace Evoq.Surfdude
 {
     public static class SurfdudeExtensions
     {
-        public static ISurfSteps Submit(this ISurfSteps journey, string relation, IDictionary<string, string> transferValues)
+        public static IWaveSteps Submit(this IWaveSteps journey, string relation, IDictionary<string, string> transferValues)
         {
-            return journey.Submit(relation, transferObject: transferValues);
+            return journey.ThenSubmit(relation, transferObject: transferValues);
         }
 
-        public static ISurfSteps Read<TModel>(this ISurfSteps journey, out Func<TModel> get) where TModel : class
+        public static IWaveSteps Read<TModel>(this IWaveSteps journey, out Func<TModel> get) where TModel : class
         {
             TModel[] models = new TModel[1];
 
             get = () => models[0];
 
-            return journey.Read<TModel>(models);
+            return journey.ThenRead<TModel>(models);
         }
     }
 }

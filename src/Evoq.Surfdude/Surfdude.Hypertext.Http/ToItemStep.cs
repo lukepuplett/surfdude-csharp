@@ -12,8 +12,8 @@
 
         //
 
-        public ToItemStep(int index, HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
-            : base(httpClient, journeyContext, resourceFormatter)
+        public ToItemStep(HttpStepContext stepContext, int index)
+            : base(stepContext)
         {
             this.Index = index;
         }
@@ -39,7 +39,7 @@
                 var firstRequiredInput = itemControl.Inputs?.FirstOrDefault(i => !i.IsOptional);
                 if (firstRequiredInput == null)
                 {
-                    return this.HttpClient.GetAsync(itemControl.HRef, cancellationToken);
+                    return this.StepContext.HttpClient.GetAsync(itemControl.HRef, cancellationToken);
                 }
                 else
                 {

@@ -4,15 +4,15 @@
     using System.Linq;
     using Evoq.Surfdude.Hypertext.SimpleJson;
 
-    public sealed class Surf : SurfBuilder
+    public sealed class Surf : WaveBuilder
     {
-        public Surf(RideContext journeyContext)
+        public Surf(SurfContext journeyContext)
             : base(journeyContext, new SimpleJsonResourceReaderWriter(journeyContext))
         {
 
         }
 
-        public static ISurfStart Wave(string rootUri)
+        public static IWaveStart Wave(string rootUri)
         {
             if (string.IsNullOrWhiteSpace(rootUri))
             {
@@ -22,7 +22,7 @@
             return Wave(CreateContext(rootUri));
         }
 
-        public static ISurfStart Wave(RideContext journeyContext)
+        public static IWaveStart Wave(SurfContext journeyContext)
         {
             if (journeyContext == null)
             {
@@ -32,11 +32,11 @@
             return new Surf(journeyContext);
         }
 
-        private static RideContext CreateContext(string rootUri)
+        private static SurfContext CreateContext(string rootUri)
         {
             int[] goodCodes = Enumerable.Range(200, 200).ToArray();
 
-            return new RideContext(rootUri)
+            return new SurfContext(rootUri)
             {
                 ExpectedStatusCodes = goodCodes
             };

@@ -7,8 +7,8 @@
 
     internal class ToStep : HttpStep
     {
-        public ToStep(string rel, HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
-            : base(httpClient, journeyContext, resourceFormatter)
+        public ToStep(HttpStepContext stepContext, string rel)
+            : base(stepContext)
         {
             if (string.IsNullOrWhiteSpace(rel))
             {
@@ -28,7 +28,7 @@
         {
             IHypertextControl control = previous.Resource.GetControl(this.Rel);
 
-            return await this.HttpClient.GetAsync(control.HRef, cancellationToken);
+            return await this.StepContext.HttpClient.GetAsync(control.HRef, cancellationToken);
         }
     }
 }

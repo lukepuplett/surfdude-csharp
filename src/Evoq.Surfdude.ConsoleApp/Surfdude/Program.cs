@@ -10,8 +10,8 @@
         {
             var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
                    .FromRoot()
-                   .Submit("registration-finder", new { status = "active", email = "mike@beans.com" })
-                   .RideItAsync();
+                   .ThenSubmit("registration-finder", new { status = "active", email = "mike@beans.com" })
+                   .GoAsync();
 
             //var report = await Surf.Wave(args?.FirstOrDefault() ?? "https://private-ac89c-surfdude.apiary-mock.com/")
             //    .FromRoot()

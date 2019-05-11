@@ -2,9 +2,9 @@
 {
     using System.Threading;
 
-    public class RideContext
+    public class SurfContext
     {
-        public RideContext(string rootUri)
+        public SurfContext(string rootUri)
         {
             if (string.IsNullOrWhiteSpace(rootUri))
             {

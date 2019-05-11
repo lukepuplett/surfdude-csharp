@@ -23,13 +23,13 @@ Surfdude lets you express an interaction with an API as a ride on a wave.
 
 	SurfReport report = await Surf.Wave("https://private-ac89c-surfdude.apiary-mock.com/")
 		.FromRoot()
-		.To("registrations")
-		.ToItem(0)
-		.Submit("update-contact-details", new { email = "mike@beans.com" })
-		.Read(out Func<ResourceModel> getContactDetails)
-		.To("registration")
-		.Submit("add-processing-instruction", new { message = "The applicant is partially sighted." })
-		.RideItAsync();
+		.Then("registrations")
+		.ThenItem(0)
+		.ThenSubmit("update-contact-details", new { email = "mike@beans.com" })
+		.ThenRead(out Func<ResourceModel> getContactDetails)
+		.Then("registration")
+		.ThenSubmit("add-processing-instruction", new { message = "The applicant is partially sighted." })
+		.GoAsync();
 
 	Console.WriteLine(getContactDetails().Email);
 

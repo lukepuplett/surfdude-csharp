@@ -2,16 +2,14 @@
 {
     using Evoq.Surfdude.Hypertext;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
     internal class SubmitStep : HttpStep
     {
-        public SubmitStep(string rel, object sendModel, HttpClient httpClient, RideContext journeyContext, IHypertextResourceFormatter resourceFormatter)
-            : base(httpClient, journeyContext, resourceFormatter)
+        public SubmitStep(HttpStepContext stepContext, string rel, object sendModel)
+            : base(stepContext)
         {
             this.Rel = rel ?? throw new ArgumentNullException(nameof(rel));
             this.SendModel = sendModel ?? throw new ArgumentNullException(nameof(sendModel));
@@ -29,9 +27,9 @@
         {
             var senderControl = previous.Resource.GetControl(this.Rel);
             
-            var httpRequest = this.ResourceFormatter.BuildRequest(new SendDictionary(this.SendModel), senderControl);
+            var httpRequest = this.StepContext.ResourceFormatter.BuildRequest(new SendDictionary(this.SendModel), senderControl);
 
-            return this.HttpClient.SendAsync(httpRequest, cancellationToken);
+            return this.StepContext.HttpClient.SendAsync(httpRequest, cancellationToken);
         }
     }
 }
