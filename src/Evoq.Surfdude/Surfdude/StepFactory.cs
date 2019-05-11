@@ -2,22 +2,27 @@
 {
     using Evoq.Surfdude.Hypertext;
     using Evoq.Surfdude.Hypertext.Http;
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public class StepFactory // Refactor into IServiceProvider.Get<FromRootStep>()
     {
         public StepFactory(SurfContext context, IHypertextResourceFormatter resourceFormatter)
         {
-            this.JourneyContext = context ?? throw new ArgumentNullException(nameof(context));
+            this.SurfContext = context ?? throw new ArgumentNullException(nameof(context));
             this.ResourceFormatter = resourceFormatter ?? throw new ArgumentNullException(nameof(resourceFormatter));
         }
 
         //
 
-        public SurfContext JourneyContext { get; }
+        public SurfContext SurfContext { get; }
 
         private IHypertextResourceFormatter ResourceFormatter { get; }
+
+        private HttpClient HttpClient { get; } = new HttpClient();
 
         //
 
@@ -47,14 +52,9 @@
             return new ReadStep<TModel>(this.CreateStepContext(context), models);
         }
 
-        private HttpClient GetHttpClient()
-        {
-            return new HttpClient();
-        }
-
         private HttpStepContext CreateStepContext(SurfContext context)
         {
-            return new HttpStepContext(this.GetHttpClient(), context, this.ResourceFormatter);
+            return new HttpStepContext(this.HttpClient, context, this.ResourceFormatter);
         }
     }
 }
