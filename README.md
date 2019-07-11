@@ -12,6 +12,8 @@ This is because Surfdude emits helpful errors when it can't find the information
 
 When I design an API, I tend to use a Surfdude client in a little console app and then work on an API Blueprint using Apiary and run my Surfdude test client against the Apiary mock until it looks and feels right, then I start coding the real API before pointing my Surfdude client at the real one to check it through.
 
+Not only do I end up with a proper RESTful API that's driven dynamically, but using the API from Postman is better since the API is fully self-documenting. There's no need for Swagger or anything else, just as a good website doesn't come with instructions.
+
 You could potentially even replace the code that executes the steps with code that generates the JSON that would make the step work. This would literally let your API client write its own API Blueprint, which can then be used to scaffold code.
 
 Out-of-the-box, Surfdude uses its built-in library for reading and understanding hypertext controls and formulating HTTP request. This will force your APIs to adhere to a particular hypertext document or media-type that I've invented. However, you can replace these parts for some code that works with a HAL derivative or even HTML.
