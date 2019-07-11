@@ -6,11 +6,13 @@ A simple little hypermedia client that dynamically drives a REST API. You can us
 
 **Designing APIs by writing the desired client code first tends to drive out much nicer APIs.**
 
-Surfdude can help you build radically better APIs.
+Surfdude helps you build radically better APIs.
 
 This is because Surfdude emits helpful errors when it can't find the information that it needs in the hypertext to perform the next step. This lets you fix and tweak the API and retry the Surfdude journey until each error is gone and the entire "wave" of API interactions can be surfed successfully.
 
-You could potentially even replace the code that executes the steps with code that generates the JSON that would make the step work. This would literally allow you to write the API from the client, first.
+When I design an API, I tend to use a Surfdude client in a little console app and then work on an API Blueprint using Apiary and run my Surfdude test client against the Apiary mock until it looks and feels right, then I start coding the real API before pointing my Surfdude client at the real one to check it through.
+
+You could potentially even replace the code that executes the steps with code that generates the JSON that would make the step work. This would literally let your API client write its own API Blueprint, which can then be used to scaffold code.
 
 Out-of-the-box, Surfdude uses its built-in library for reading and understanding hypertext controls and formulating HTTP request. This will force your APIs to adhere to a particular hypertext document or media-type that I've invented. However, you can replace these parts for some code that works with a HAL derivative or even HTML.
 
