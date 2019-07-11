@@ -4,9 +4,9 @@ Because you can surf the best APIs.
 
 A simple little hypermedia client that dynamically drives a REST API. You can use this to test that an API is genuinely RESTful, i.e. it can be driven entirely by links and hypertext transfer, or you can use this in your application to work a backend API instead of a static URL template based client like Refit.
 
-**Designing APIs by writing the desired client code first tends to drive out much nicer APIs.**
+## Surfdude helps you build radically better APIs.
 
-Surfdude helps you build radically better APIs.
+#### Designing APIs by writing the desired client code first tends to drive out much nicer APIs
 
 This is because Surfdude emits helpful errors when it can't find the information that it needs in the hypertext to perform the next step. This lets you fix and tweak the API and retry the Surfdude journey until each error is gone and the entire "wave" of API interactions can be surfed successfully.
 
