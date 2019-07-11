@@ -4,7 +4,7 @@ Because you can surf the best APIs.
 
 A simple little hypermedia client that dynamically drives a REST API. You can use this to test that an API is genuinely RESTful, i.e. it can be driven entirely by links and hypertext transfer, or you can use this in your application to work a backend API instead of a static URL template based client like Refit.
 
-## Surfdude helps you build radically better APIs.
+## Surfdude helps you build radically better APIs
 
 #### Designing APIs by writing the desired client code first tends to drive out much nicer APIs
 
@@ -27,6 +27,10 @@ For an API this means thinking of the things that a client would like to do with
 ## Sample Ride
 
 Surfdude lets you express an interaction with an API as a ride on a wave.
+
+#### Start from the root / resource
+
+Bookmarking a page on the web is risky since the website owner could move things around. So we all tend to shop by going in the front door. This is true of a REST API and it allows the author to move the URLs around and introduce new paths and trial things without breaking existing clients. This is the true power of _real_ REST.
 
 	SurfReport report = await Surf.Wave("https://private-ac89c-surfdude.apiary-mock.com/")
 		.FromRoot()
