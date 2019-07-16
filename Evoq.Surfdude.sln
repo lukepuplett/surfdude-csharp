@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evoq.Surfdude", "Evoq.Surfdude\Evoq.Surfdude.csproj", "{5B97D01D-2ABC-4BEB-9235-1C954438E7A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evoq.Surfdude", "src\Evoq.Surfdude\Evoq.Surfdude.csproj", "{5B97D01D-2ABC-4BEB-9235-1C954438E7A3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evoq.Surfdude.ConsoleApp", "Evoq.Surfdude.ConsoleApp\Evoq.Surfdude.ConsoleApp.csproj", "{D63932DB-E5EA-4761-ABE0-68BEE8BCEF88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evoq.Surfdude.ConsoleApp", "tests\Evoq.Surfdude.ConsoleApp\Evoq.Surfdude.ConsoleApp.csproj", "{D63932DB-E5EA-4761-ABE0-68BEE8BCEF88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{112700C3-C101-4466-B6D4-A28E2D7C555F}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evoq.Surfdude.SimpleJson", "Evoq.Surfdude.SimpleJson\Evoq.Surfdude.SimpleJson.csproj", "{5AD7B7E6-2AFC-4F81-B8BC-6DC889B6C288}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evoq.Surfdude.SimpleJson", "src\Evoq.Surfdude.SimpleJson\Evoq.Surfdude.SimpleJson.csproj", "{5AD7B7E6-2AFC-4F81-B8BC-6DC889B6C288}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,7 +29,7 @@ steps:
   inputs:
     command: 'pack'
     configuration: 'release'
-    packagesToPack: '**/Evoq.Surfdude.csproj'
+    packagesToPack: 'src/**/Evoq.Surfdude.*.csproj'
     packDirectory: '$(build.artifactStagingDirectory)'
     # versioningScheme: 'byBuildNumber'
 - task: PowerShell@2

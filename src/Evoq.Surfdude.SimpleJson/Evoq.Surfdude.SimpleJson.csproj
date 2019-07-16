@@ -3,15 +3,20 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Evoq</RootNamespace>
+
+    <title>Surfdude for SimpleJson</title>
+    <description>Surfdude dynamically drives really RESTful APIs. This package works with APIs that return SimpleJson.</description>
+    <packageTags>rest;restful;api;refit;hateoas;hypertext;hypermedia;json</packageTags>
+    <packageId>Surfude</packageId>
+    <packageVersion>1.0.1</packageVersion>
+    <repositoryUrl>https://github.com/lukepuplett/surfdude-csharp</repositoryUrl>
+
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Evoq.Surfdude\Evoq.Surfdude.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="Flurl" Version="2.8.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="Surfdude" Version="1.0.0" />
     <PackageReference Include="UriTemplate.Core" Version="1.0.2" />  
   </ItemGroup>
   
