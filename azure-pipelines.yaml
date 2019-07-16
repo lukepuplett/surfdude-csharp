@@ -36,7 +36,7 @@ steps:
   displayName: 'Push to NuGet.org'
   inputs:
     targetType: 'filePath'
-    filePath: '/build/Publish-ToNuGet.ps1'
+    filePath: 'build/Publish-ToNuGet.ps1'
     arguments: '-PackageSpec $(Build.ArtifactStagingDirectory)\Surfdude*.nupkg -ApiKey $(azure-pipelines-evoq-nuget-apikey)'
 
 #- task: DotNetCoreCLI@2
