@@ -1,0 +1,42 @@
+pool:
+  vmImage: ''ubuntu-16.04' # 'vs2017-win2016' - https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml
+
+steps:
+- task: DeleteFiles@1
+  inputs:
+    sourceFolder: '$(Agent.BuildDirectory)'
+    contents: '**\*.nupkg'
+- task: DotNetCoreInstaller@0 # task@version, e.g. "VSBuild@1"
+  enabled: false # DISABLED!
+  displayName: 'Install .NET Core on build server'
+  inputs:
+    version: '2.2.104'
+- task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet packages'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  enabled: false # DISABLED!
+  inputs:
+    command: 'test'
+    projects: '**/*.csproj'
+    publishTestResults: true # Optional
+    #testRunTitle: # Optional
+- task: DotNetCoreCLI@2
+  displayName: 'Package this NuGet package'
+  inputs:
+    command: 'pack'
+    configuration: 'release'
+    packagesToPack: '**/Evoq.Surfdude.csproj'
+    packDirectory: '$(build.artifactStagingDirectory)'
+    # versioningScheme: 'byBuildNumber'
+- task: DotNetCoreCLI@2
+  displayName: 'Push this package to the feed'
+  inputs:
+    command: 'push'
+    nuGetFeedType: 'internal'
+    packagesToPush: '$(build.artifactStagingDirectory)/Surfdude*.nupkg'
+    publishVstsFeed: 'RA-Packages'
+    
