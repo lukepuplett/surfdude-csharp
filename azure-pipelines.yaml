@@ -5,7 +5,7 @@ steps:
 - task: DeleteFiles@1
   inputs:
     sourceFolder: '$(Agent.BuildDirectory)'
-    contents: '**\*.nupkg'
+    contents: '**/*.nupkg'
 - task: DotNetCoreInstaller@0 # task@version, e.g. "VSBuild@1"
   enabled: false # DISABLED!
   displayName: 'Install .NET Core on build server'
@@ -32,12 +32,20 @@ steps:
     packagesToPack: '**/Evoq.Surfdude.csproj'
     packDirectory: '$(build.artifactStagingDirectory)'
     # versioningScheme: 'byBuildNumber'
-- task: DotNetCoreCLI@2
-  displayName: 'Push this package to the feed'
+- task: PowerShell@2
+  displayName: 'Push to NuGet.org'
   inputs:
-    command: 'push'
-    nuGetFeedType: 'external'
-    packagesToPush: '$(build.artifactStagingDirectory)/Surfdude*.nupkg'
-    feedsToUse: 'select'
-    includeNuGetOrg: true
-    externalFeedCredentials: $(azure-pipelines-evoq-nuget-apikey)
+    targetType: 'filePath'
+    filePath: '/src/Publish-ToNuGet.ps1'
+    arguments: '-PackageSpec $(Build.ArtifactStagingDirectory)\Surfdude*.nupkg -ApiKey $(azure-pipelines-evoq-nuget-apikey)'
+
+#- task: DotNetCoreCLI@2
+#  displayName: 'Push this package to the feed'
+#  inputs:
+#    command: 'push'
+#    nuGetFeedType: 'external'
+#    packagesToPush: '$(build.artifactStagingDirectory)/Surfdude*.nupkg'
+#    feedsToUse: 'select'
+#    includeNuGetOrg: true
+#    externalFeedCredentials: $(azure-pipelines-evoq-nuget-apikey)
+    
