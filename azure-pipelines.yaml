@@ -36,7 +36,8 @@ steps:
   displayName: 'Push this package to the feed'
   inputs:
     command: 'push'
-    nuGetFeedType: 'internal'
+    nuGetFeedType: 'external'
     packagesToPush: '$(build.artifactStagingDirectory)/Surfdude*.nupkg'
-    publishVstsFeed: 'RA-Packages'
-    
+    feedsToUse: 'select'
+    includeNuGetOrg: true
+    externalFeedCredentials: $(azure-pipelines-evoq-nuget-apikey)
