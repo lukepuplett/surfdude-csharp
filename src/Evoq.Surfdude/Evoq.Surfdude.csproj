@@ -9,7 +9,7 @@
     <description>Surfdude dynamically drives really RESTful APIs. This package just contains abstractions and parts for building a Surfdude API client. Please search for Surfdude client packages that work with specific media-types.</description>
     <packageTags>rest;restful;api;refit;hateoas;hypertext;hypermedia</packageTags>
     <packageId>Surfdude</packageId>
-    <packageVersion>1.0.2</packageVersion>
+    <packageVersion>1.0.3</packageVersion>
     <repositoryUrl>https://github.com/lukepuplett/surfdude-csharp</repositoryUrl>
 
   </PropertyGroup>
