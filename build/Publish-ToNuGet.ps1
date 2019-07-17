@@ -6,8 +6,9 @@ param(
 )
 
 $feedLocation = "https://api.nuget.org/v3/index.json";
-$packageFile = Get-Item $PackageSpec;
+$packageFiles = Get-Item $PackageSpec;
 
-Write-Output [String]::Concat($packageFile.Count, " packages found to publish");
+Write-Output "Package files matching spec.";
+Write-Output $packageFiles.FullName;
 
-dotnet nuget push $packageFile.FullName --api-key $ApiKey --source $feedLocation;
+dotnet nuget push $packageFiles.FullName --api-key $ApiKey --source $feedLocation;
