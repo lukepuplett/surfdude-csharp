@@ -9,11 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="Evoq.Instrumentation" Version="1.4.2" />
-    <PackageReference Include="Surfdude" Version="1.0.0" />
+    
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Evoq.Surfdude.SimpleJson\Evoq.Surfdude.SimpleJson.csproj" />    
+    <ProjectReference Include="..\..\src\Evoq.Surfdude\Evoq.Surfdude.csproj" />    
+    <ProjectReference Include="..\..\src\Evoq.Surfdude.SimpleJson\Evoq.Surfdude.SimpleJson.csproj" />
   </ItemGroup>
 
 </Project>
