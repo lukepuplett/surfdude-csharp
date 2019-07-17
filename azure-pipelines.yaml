@@ -25,12 +25,13 @@ steps:
     publishTestResults: true # Optional
     #testRunTitle: # Optional
 - task: DotNetCoreCLI@2
-  displayName: 'Package this NuGet package'
+  displayName: 'Package NuGet packages in src'
   inputs:
     command: 'pack'
     configuration: 'release'
     packagesToPack: 'src/**/Evoq.Surfdude*.csproj'
     packDirectory: '$(build.artifactStagingDirectory)'
+    verbosityPack: 'normal'
     # versioningScheme: 'byBuildNumber'
 - task: PowerShell@2
   displayName: 'Push to NuGet.org'
