@@ -11,4 +11,6 @@ $packageFiles = Get-Item $PackageSpec;
 Write-Output "Package files matching spec.";
 Write-Output $packageFiles.FullName;
 
-dotnet nuget push $packageFiles.FullName --api-key $ApiKey --source $feedLocation;
+foreach ($item in $packageFiles) {     
+     dotnet nuget push $item.FullName --api-key $ApiKey --source $feedLocation;
+}
