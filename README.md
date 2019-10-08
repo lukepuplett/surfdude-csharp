@@ -26,7 +26,7 @@ For an API this means thinking of the things that a client would like to do with
 
 ## Sample Ride
 
-Surfdude lets you express an interaction with an API as a ride on a wave.
+Surfdude lets you express an interaction with an API as a journey, like riding on a wave, changing direction.
 
 #### Start from the root / resource
 
