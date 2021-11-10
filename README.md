@@ -84,10 +84,10 @@ The JSON, HTML, XML or YAML or whatever of your API should contain hypermedia co
 
 The upshot of this uniformity is that a nice website needs no further documentation; if the browser cannot work with the HTML then there is a bug with the website or "web design" as we call it. If a website needs a user manual then there is a serious UX issue. The same is true of an API.
 
-Surfdude lets you replace the classes that read and process your hypertext resources and their controls.
+Surfdude lets you replace the classes that read and process your hypertext resources and their controls so you can design your own media-type schema.
 
 ## Evolving APIs
 
 Websites change over time and yet customers rarely notice. Their experience remains uninterrupted, the links keep working and adding an item to a shopping cart continues to work, even though the underlying resources may be changing each day.
 
-A great API using a dynamic client affords the same flexibility since interactions are loosely based on relation names.
+A great API using a dynamic client affords the same flexibility since interactions are loosely based on relation names, not tied to URLs.
